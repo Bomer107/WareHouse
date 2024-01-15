@@ -7,9 +7,9 @@ class WareHouse {
         WareHouse(const string &configFilePath){
             ifstream configFile {configFilePath};
             string line {};
-            while (getline(configFile, line)){
+            
 
-            }
+            
         }
         void start();
         const vector<BaseAction*> &getActionsLog() const;
