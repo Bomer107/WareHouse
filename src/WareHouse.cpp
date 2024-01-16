@@ -6,7 +6,8 @@ completedOrders{}, customerCounter{}, volunteerCounter{}
 {
     ifstream configFile {configFilePath};
     string line{};
-    while (getline(configFile, line)){
+    while (getline(configFile, line))
+    {
     }
     configFile.close();   
 }
