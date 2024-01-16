@@ -11,7 +11,13 @@ class WareHouse {
 
             
         }
-        void start();
+        void start(){
+            open();
+            while(isOpen){
+
+            }
+        }
+
         const vector<BaseAction*> &getActionsLog() const;
         void addOrder(Order* order);
         void addAction(BaseAction* action);
@@ -19,8 +25,12 @@ class WareHouse {
         Customer &getCustomer(int customerId) const;
         Volunteer &getVolunteer(int volunteerId) const;
         Order &getOrder(int orderId) const;
-        void close();
-        void open();
+        void close(){
+            isOpen=false;
+        }
+        void open(){
+            isOpen=true;
+        }
 
     private:
         bool isOpen;
@@ -32,5 +42,6 @@ class WareHouse {
         vector<Customer*> customers;
         int customerCounter; //For assigning unique customer IDs
         int volunteerCounter; //For assigning unique volunteer IDs
+
 };
 
