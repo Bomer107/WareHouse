@@ -41,6 +41,7 @@ Customer::virtual Customer *clone() const = 0; // Return a copy of the custome
 
 Customer::SoldierCustomer::SoldierCustomer(int id, string name, int locationDistance, int maxOrders);
 Customer::SoldierCustomer::SoldierCustomer *clone() const override;
-CivilianCustomer(int id, string name, int locationDistance, int maxOrders);
 
+
+CivilianCustomer(int id, string name, int locationDistance, int maxOrders);
 CivilianCustomer *clone() const override;
