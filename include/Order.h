@@ -1,6 +1,6 @@
 #pragma once
-
 #include <string>
+#include <iostream>
 #include <vector>
 using std::string;
 using std::vector;
@@ -12,7 +12,13 @@ enum class OrderStatus {
     PENDING,
     COLLECTING,
     DELIVERING,
-    COMPLETED,
+    COMPLETED
+};
+
+class OrderStatusHandler
+{
+    public:
+        static string toString(OrderStatus OrderStatus);
 };
 
 #define NO_VOLUNTEER -1

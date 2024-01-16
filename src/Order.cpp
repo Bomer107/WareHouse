@@ -45,7 +45,25 @@ OrderStatus Order::getStatus() const
     return status;
 }
 
+
 const string Order::toString() const
 {
-    
+    string toString = "OrderId: " + id + '\n';
+    toString += "OrderStatus: " + OrderStatusHandler::toString(status) + '\n';
+    toString += "CustomerId: " + customerId + '\n';
+    toString += "Collector: " + collectorId + '\n';
+    toString += "Driver: " + driverId + '\n';
+    return toString;
+}
+
+string OrderStatusHandler::toString(OrderStatus OrderStatus)
+{
+    switch (OrderStatus) 
+    {
+        case OrderStatus::PENDING: return "PENDING";
+        case OrderStatus::COLLECTING: return "COLLECTING";
+        case OrderStatus::DELIVERING: return "DELIVERING";
+        case OrderStatus::COMPLETED: return "COMPLETED";
+        default: return "Unknown";
+    }
 }
