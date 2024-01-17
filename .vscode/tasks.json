@@ -1,7 +1,7 @@
 {
     "tasks": [
         {
-            "label": "build",
+            "label": "make",
             "type": "shell",
             "command": "make",
             "args": [],
