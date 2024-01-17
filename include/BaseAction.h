@@ -6,7 +6,7 @@ using std::string;
 using std::vector;
 
 enum class ActionStatus{
-    COMPLETED, ERROR
+    INPROCESS, COMPLETED, ERROR
 };
 
 enum class CustomerType{
