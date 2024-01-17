@@ -1,29 +1,44 @@
 #include "../include/BaseAction.h"
        
-       
-       
-       
- BaseAction::BaseAction():status(ActionStatus::INPROCESS){}
- ActionStatus BaseAction:: getStatus() const
- {
-     return status;
- }
- 
- void BaseAction::complete()
- {
-    ActionStatus tmp (ActionStatus :: COMPLETED);
-    BaseAction :: status=tmp;
- }
- void BaseAction:: error(string errorMsg)
- {
-    BaseAction: errorMsg = errorMsg;
-    ActionStatus tmp (ActionStatus ::ERROR);
-    BaseAction :: status=tmp;
+BaseAction::BaseAction(): 
+errorMsg{}, status{}{}
 
- }
- string BaseAction:: getErrorMsg() const
- {
-     return errorMsg;
- }
+ActionStatus BaseAction::getStatus() const
+{
+    return status;
+}
+
+void BaseAction::complete()
+{
+   status = ActionStatus::COMPLETED;
+}
+
+void BaseAction::error(string errorMsg)
+{
+   BaseAction::errorMsg = errorMsg;
+   status = ActionStatus::ERROR;
+}
+
+string BaseAction:: getErrorMsg() const
+{
+    return errorMsg;
+}
     
- 
+SimulateStep::SimulateStep(int numOfSteps) :
+numOfSteps{numOfSteps}
+{}
+
+void SimulateStep::act(WareHouse &wareHouse)
+{
+
+}
+
+std::string SimulateStep::toString() const
+{
+
+}
+
+SimulateStep * SimulateStep::clone() const
+{
+
+}

@@ -1,13 +1,14 @@
 {
     "configurations": [
     {
+        "preLaunchTask": "make",
         "name": "(gdb) Launch",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "program": "${workspaceFolder}/bin/WareHouse",
         "args": [],
         "stopAtEntry": false,
-        "cwd": "${fileDirname}",
+        "cwd": "${workspaceFolder}",
         "environment": [],
         "externalConsole": false,
         "miDebuggerPath": "/usr/bin/gdb",

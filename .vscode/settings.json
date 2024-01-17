@@ -45,5 +45,12 @@
         "streambuf": "cpp",
         "typeinfo": "cpp"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/bomer/C++/project1/WareHouse_project/Skeleton/bin",
+            "binaryPath": "/home/bomer/C++/project1/WareHouse_project/Skeleton/bin/WareHouse",
+            "binaryArgs": []
+        }
+    ]
 }
