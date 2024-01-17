@@ -1,7 +1,7 @@
 #include "../include/WareHouse.h"
 
 WareHouse::WareHouse(const string &configFilePath) :
-isOpen{false}, actionsLog{}, volunteers{}, pendingOrders{}, vol{}, 
+isOpen{false}, actionsLog{}, volunteers{}, pendingOrders{}, inProcessOrders{}, 
 completedOrders{}, customerCounter{}, volunteerCounter{}
 {
     ifstream configFile {configFilePath};
