@@ -1,7 +1,8 @@
 #include "../include/BaseAction.h"
        
 BaseAction::BaseAction(): 
-errorMsg{}, status{}{}
+errorMsg{}, status{}
+{}
 
 ActionStatus BaseAction::getStatus() const
 {
@@ -25,7 +26,7 @@ string BaseAction:: getErrorMsg() const
 }
     
 SimulateStep::SimulateStep(int numOfSteps) :
-numOfSteps{numOfSteps}
+BaseAction(), numOfSteps{numOfSteps}
 {}
 
 void SimulateStep::act(WareHouse &wareHouse)
@@ -42,3 +43,27 @@ SimulateStep * SimulateStep::clone() const
 {
 
 }
+
+
+Order::Order(int id):BaseAction(), customerId{id}
+{}
+
+void Order::act(WareHouse &wareHouse)
+{
+   wareHouse.addAction(this);
+   Customer& customer {wareHouse.getCustomer(customerId)};
+   int distance {customer.getCustomerDistance()};
+   int numOrder {wareHouse.getNumOrder()};
+   int id {customerId};
+   Order* order {new Order(numOrder,id,distance)};
+   wareHouse.addOrder(order);
+}
+
+Order * Order::clone() const
+{
+}
+
+string Order::toString() const
+{
+}  
+

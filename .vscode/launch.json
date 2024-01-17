@@ -1,7 +1,7 @@
 {
     "configurations": [
     {
-        "preLaunchTask": "make",
+        "preLaunchTask": "build",
         "name": "(gdb) Launch",
         "type": "cppdbg",
         "request": "launch",
