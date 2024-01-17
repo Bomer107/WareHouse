@@ -45,10 +45,10 @@ SimulateStep * SimulateStep::clone() const
 }
 
 
-Order::Order(int id):BaseAction(), customerId{id}
+AddOrder::AddOrder(int id) : BaseAction::BaseAction(), customerId{id}
 {}
 
-void Order::act(WareHouse &wareHouse)
+void AddOrder::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
    Customer& customer {wareHouse.getCustomer(customerId)};
@@ -59,11 +59,11 @@ void Order::act(WareHouse &wareHouse)
    wareHouse.addOrder(order);
 }
 
-Order * Order::clone() const
+AddOrder * AddOrder::clone() const
 {
 }
 
-string Order::toString() const
+string AddOrder::toString() const
 {
 }  
 

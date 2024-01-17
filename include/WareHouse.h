@@ -10,7 +10,7 @@ using namespace std;
 class BaseAction;
 class Volunteer;
 
-// Warehouse responsible for Volunteers, Customers and Actions.
+// Warehouse responsible for Volunteers, Customers Actions, and Orders.
 
 
 class WareHouse {
@@ -33,7 +33,7 @@ class WareHouse {
         vector<BaseAction*> actionsLog;
         vector<Volunteer*> volunteers;
         vector<Order*> pendingOrders;
-        vector<Order*> vol;
+        vector<Order*> inProcessOrders;
         vector<Order*> completedOrders;
         vector<Customer*> customers;
         int customerCounter; //For assigning unique customer IDs
