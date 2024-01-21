@@ -27,6 +27,7 @@ class WareHouse {
         void close();
         void open();
         int getNumOrder();
+        int getNumCustomer();
     private:
         bool isOpen;
         vector<BaseAction*> actionsLog;
