@@ -8,4 +8,4 @@ using namespace std;
 
 void parseString(string &line, vector <string> &command);
 
-void executeCommand(vector <string> &command, bool initial);
+int executeCommand(vector <string> &command);

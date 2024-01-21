@@ -1,38 +1,88 @@
 #include "../include/executeLine.h"
 
-void parseString(string &line, vector<string> &command)
-{
-    int s_index {};
-    int e_index {};
-    string word{};
-    bool comment = (line[0] == '#');
-    while(!comment && e_index != -1)
-    {
-        e_index = line.find(' ', s_index);
-        word = line.substr(s_index, e_index - s_index);
-        s_index = e_index + 1;
-        if( word[0] == '#')
-            comment = true;
-        else
-            if( word != "")
-                command.push_back(word);
-    }
-}
-
-void executeCommand(vector <string> &command, bool initial){
+int configWareHouse(vector <string> &command){
     if (command[0] == "customer"){
-        if (command[2] == "solider"){
-            cout << "hey";
+        if (command.size() != 5){
+            cerr << "usage: customer <customer_name> <customer_type> <customer_distance> <max_orders>" << endl;
+        }
+        else if (command[2] == "solider"){
+            
+        }
+        else if (command[2] == "civilian"){
+            
+        }
+        else{
+            cerr << "usage: customer <customer_name> <solider / civilian> <customer_distance> <max_orders>" << endl;
         }
     }
 
     else if(command[0] == "volunteer"){
 
     }
+}
 
-    else if(initial){
-        cerr << "usage:";
-        return;
+int executeCommand(vector <string> &command){
+    if(command[0] == "step"){
+        if (command.size() != 2){
+            cerr << "usage: step <number_of_steps>" << endl;
+            return -1;
+        }
+    }
+
+    else if(command[0] == "order"){
+        if (command.size() != 2){
+            cerr << "usage: order <customer_id>" << endl;
+            return -1;
+        }
+    }
+
+    else if(command[0] == "orderStatus"){
+        if (command.size() != 2){
+            cerr << "usage: orderStatus <order_id>" << endl;
+            return -1;
+        }
+    }
+
+    else if(command[0] == "customerStatus"){
+        if (command.size() != 2){
+            cerr << "usage: customerStatus <customer_id>" <<endl;
+            return -1;
+        }
+    }
+
+    else if(command[0] == "volunteerStatus"){
+        if (command.size() != 2){
+            cerr << "usage: volunteerStatus <volunteer_id>" << endl;
+            return -1;
+        }
+    }
+
+    else if(command[0] == "log"){
+        if (command.size() != 1){
+            cerr << "usage: log" << endl;
+            return -1;
+        }
+    }
+
+    else if(command[0] == "close"){
+        if (command.size() != 1){
+            cerr << "usage: close" << endl;
+            return -1;
+        }
+    }
+
+    else if(command[0] == "backup"){
+        if (command.size() != 1){
+            cerr << "usage: backup" << endl;
+            return -1;
+        }
+    }
+
+    else if(command[0] == "restore"){
+        if (command.size() != 1){
+            cerr << "usage: restore" << endl;
+            return -1;
+        }
     }
 
 }

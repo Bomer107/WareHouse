@@ -15,7 +15,7 @@ completedOrders{}, customerCounter{}, volunteerCounter{}
 void WareHouse::start(){
     open();
 }
-const vector<BaseAction*> & WareHouse::getActionsLog() const
+const vector<BaseAction*> & WareHouse::getActions() const
 {
 
 }
@@ -26,11 +26,6 @@ void WareHouse::addOrder(Order* order)
 }
 
 void WareHouse::addAction(BaseAction* action)
-{
-
-}
-
-void WareHouse::printActionsLogs()
 {
 
 }
