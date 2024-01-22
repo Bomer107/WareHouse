@@ -1,5 +1,7 @@
 #include "../include/Action.h"
-       
+#include <iostream>
+#include <string>
+using std::string;     
 BaseAction::BaseAction(): 
 errorMsg{}, status{}
 {}
@@ -51,16 +53,16 @@ AddOrder::AddOrder(int id) : BaseAction::BaseAction(), customerId{id}
 void AddOrder::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
-   
-   Customer& customer {wareHouse.getCustomer(customerId)};
-   if (customer != nullptr || !customer.canMakeOrder()) {
-       int distance {customer.getCustomerDistance()};
-       int numOrder {wareHouse.getNumOrder()};
-       int id {customerId};
-       Order* order {new Order(numOrder,id,distance)};
-       wareHouse.addOrder(order);
-       BaseAction::complete();
-   }
+   if(customerId<=wareHouse.getNumCustomer()){
+       Customer& customer {wareHouse.getCustomer(customerId)};
+       if (customer.canMakeOrder()) {
+           int distance {customer.getCustomerDistance()};
+           int numOrder {wareHouse.getNumOrder()};
+           int id {customerId};
+           Order* order {new Order(numOrder,id,distance)};
+           wareHouse.addOrder(order);
+           BaseAction::complete();
+       }
    else{
       BaseAction::error("Cannot place this order");
    }
@@ -106,3 +108,25 @@ string toString()
 {
 
 };
+
+        PrintOrderStatus:: PrintOrderStatus(int id):orderId{id}
+        {
+        };
+        void PrintOrderStatus:: act(WareHouse &wareHouse)
+        {
+            wareHouse.addAction(this);
+           Order &order=wareHouse.getOrder(orderId);
+            order.toString();
+
+        }
+         PrintOrderStatus *clone()
+         {
+
+         };
+          std::string toString() const 
+        { 
+        
+          
+       
+
+        };
