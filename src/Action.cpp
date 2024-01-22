@@ -33,7 +33,6 @@ BaseAction(), numOfSteps{numOfSteps}
 
 void SimulateStep::act(WareHouse &wareHouse)
 {
-
 }
 
 std::string SimulateStep::toString() const
@@ -62,7 +61,7 @@ void AddOrder::act(WareHouse &wareHouse)
            Order* order {new Order(numOrder,id,distance)};
            wareHouse.addOrder(order);
            BaseAction::complete();
-       }
+       }}
    else{
       BaseAction::error("Cannot place this order");
    }
@@ -70,6 +69,7 @@ void AddOrder::act(WareHouse &wareHouse)
 
 AddOrder * AddOrder::clone() const
 {
+   return (new AddOrder(customerId));
 }
 
 string AddOrder::toString() const
@@ -79,54 +79,58 @@ string AddOrder::toString() const
 
 
 
- AddCustomer::AddCustomer(string customerName, string customerType, int distance, int maxOrders)
- :BaseAction::BaseAction(), customerName{customerName},
- distance{distance},maxOrders{maxOrders}
- { 
+AddCustomer::AddCustomer(string customerName, string customerType, int distance, int maxOrders)
+:BaseAction(), customerName{customerName},
+distance{distance},maxOrders{maxOrders}
+{ 
    
-   if (customerType == "soldier") {
-        const CustomerType customerType = CustomerType::Soldier;
-    } else {
-        const CustomerType customerType = CustomerType::Civilian; 
-    }
- };
+if (customerType == "soldier") {
+      const CustomerType customerType = CustomerType::Soldier;
+}
+   else {
+      const CustomerType customerType = CustomerType::Civilian; 
+   }
+};
 void AddCustomer:: act(WareHouse &wareHouse){
 wareHouse.addAction(this);
 
- if(customerType == CustomerType::Soldier){
-Customer *customer{new SoldierCustomer(wareHouse.getNumCustomer(), customerName ,distance, maxOrders)}; 
- }
- else{
-Customer *customer{new CivilianCustomer(wareHouse.getNumCustomer(), customerName ,distance, maxOrders)};
- }
-};
-AddCustomer *clone()
+if(customerType == CustomerType::Soldier) 
 {
-
+    Customer *customer{new SoldierCustomer(wareHouse.getNumCustomer(), customerName ,distance, maxOrders)}; 
+ }
+ else
+ {
+    Customer *customer{new CivilianCustomer(wareHouse.getNumCustomer(), customerName ,distance, maxOrders)};
+ }
 };
+string AddCustomer::getcustomrType() const
+{
+   
+}
+AddCustomer *AddCustomer:: clone() const{
+   string customerType=getcustomrType();
+    return new AddCustomer (customerName,customerType ,distance,maxOrders);
+}
 string toString() 
 {
 
 };
 
-        PrintOrderStatus:: PrintOrderStatus(int id):orderId{id}
-        {
-        };
-        void PrintOrderStatus:: act(WareHouse &wareHouse)
-        {
-            wareHouse.addAction(this);
-           Order &order=wareHouse.getOrder(orderId);
-            order.toString();
+PrintOrderStatus:: PrintOrderStatus(int id):orderId{id}
+{
 
-        }
-         PrintOrderStatus *clone()
-         {
-
-         };
-          std::string toString() const 
-        { 
+};
+void PrintOrderStatus:: act(WareHouse &wareHouse)
+{
+    wareHouse.addAction(this);
+   Order &order=wareHouse.getOrder(orderId);
+    order.toString();
+}
+ PrintOrderStatus* PrintOrderStatus:: clone() const
+ {
+   return (new PrintOrderStatus(orderId));
+ };
+  std::string toString() const 
+{ 
         
-          
-       
-
         };

@@ -63,6 +63,9 @@ class AddCustomer : public BaseAction {
         void act(WareHouse &wareHouse) override;
         AddCustomer *clone() const override;
         string toString() const override;
+        
+        string getcustomrType() const;
+        
     private:
         const string customerName;
         const CustomerType customerType;
