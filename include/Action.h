@@ -80,6 +80,7 @@ class PrintOrderStatus : public BaseAction {
         string toString() const override;
     private:
         const int orderId;
+        Order* order;
 };
 
 class PrintCustomerStatus: public BaseAction {
