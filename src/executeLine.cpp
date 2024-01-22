@@ -1,26 +1,5 @@
 #include "../include/executeLine.h"
 
-int configWareHouse(vector <string> &command){
-    if (command[0] == "customer"){
-        if (command.size() != 5){
-            cerr << "usage: customer <customer_name> <customer_type> <customer_distance> <max_orders>" << endl;
-        }
-        else if (command[2] == "solider"){
-            
-        }
-        else if (command[2] == "civilian"){
-            
-        }
-        else{
-            cerr << "usage: customer <customer_name> <solider / civilian> <customer_distance> <max_orders>" << endl;
-        }
-    }
-
-    else if(command[0] == "volunteer"){
-
-    }
-}
-
 int executeCommand(vector <string> &command){
     if(command[0] == "step"){
         if (command.size() != 2){

@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
@@ -20,18 +21,22 @@ class WareHouse {
         void start();
         void addOrder(Order* order);
         void addAction(BaseAction* action);
+        void AddCustomer(Customer *customer);
         Customer &getCustomer(int customerId) const;
         Volunteer &getVolunteer(int volunteerId) const;
         Order &getOrder(int orderId) const;
+        const vector<Order*> getPendingOrders() const;
         const vector<BaseAction*> &getActions() const;
         void close();
         void open();
-        int getNumOrder();
-        int getNumCustomer();
+        int getNumOrder() const;
+        int getNumCustomer() const;
     private:
         bool isOpen;
         vector<BaseAction*> actionsLog;
         vector<Volunteer*> volunteers;
+        vector<Order*> allOrders;
+        vector<Volunteer*> availableVolunteers;
         vector<Order*> pendingOrders;
         vector<Order*> inProcessOrders;
         vector<Order*> completedOrders;
