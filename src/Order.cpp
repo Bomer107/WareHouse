@@ -15,6 +15,11 @@ int Order::getCustomerId() const
     return customerId;
 }
 
+int Order::getDistance() const
+{
+    return distance;
+}
+
 void Order::setStatus(OrderStatus status)
 {
     Order::status = status;

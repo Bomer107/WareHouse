@@ -5,7 +5,7 @@ Customer::Customer(int id, const string &name, int locationDistance, int maxOrde
 id{id}, name{name}, locationDistance{locationDistance}, maxOrders{maxOrders}, ordersId{}
 {}
 
-const string &Customer::getName() const
+const string & Customer::getName() const
 {
     return name;
 }
@@ -35,7 +35,7 @@ bool Customer::canMakeOrder() const
     return (getNumOrders() < maxOrders);
 }
 
-const vector<int> & Customer::getOrdersIds() const
+const vector<int> & Customer::getOrdersId() const
 {
     return ordersId;
 }

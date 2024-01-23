@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 #include <vector>
 using std::string;
@@ -29,6 +28,7 @@ class Order {
         Order(int id, int customerId, int distance);
         int getId() const;
         int getCustomerId() const;
+        int getDistance() const;
         void setStatus(OrderStatus status);
         void setCollectorId(int collectorId);
         void setDriverId(int driverId);
