@@ -5,34 +5,7 @@ bool configWareHouse(WareHouse &warehouse, vector<string> &command, int lineNum)
     string & the_command = command[0];
 
     if (the_command == "customer"){
-        string usage = "usage: customer <customer_name> <customer_type: solider/civilian> <customer_distance> <max_orders>";
-        if (!isValid(command, 5, lineNum, usage)){
-            return false;
-        }
-        string & customer_name = command[1];
-        string & customer_type = command[2];
-        int customer_distance = csti(command[3], "customer distance");
-        int max_orders = csti(command[4], "max_orders");
-
-        if(customer_distance < 1 || max_orders < 1){
-            return false;
-        }
-        
-        if (customer_type == "solider"){
-            warehouse.addCustomer
-            (new SoldierCustomer(warehouse.getNumCustomers(), customer_name, customer_distance, max_orders));
-            return true;
-        }
-        else if (customer_type == "civilian"){
-            warehouse.addCustomer
-            (new CivilianCustomer(warehouse.getNumCustomers(), customer_name, customer_distance, max_orders));
-            return true;
-        }
-        else{
-            printError(lineNum);
-            cerr << usage << endl;
-            return false;
-        }
+        addCustomerGeneral(warehouse, command, lineNum, true);
     }
 
     else if(the_command == "volunteer"){
@@ -42,7 +15,7 @@ bool configWareHouse(WareHouse &warehouse, vector<string> &command, int lineNum)
         if(volunteer_role == "collector"){
             string usage = "usage: volunteer <volunteer_name> collector <volunteer_cooldown>";
 
-            if (!isValid(command, 4, lineNum, usage)){
+            if (!isValid(command, 4, lineNum, usage, true)){
                 return false;
             }
 
@@ -57,7 +30,7 @@ bool configWareHouse(WareHouse &warehouse, vector<string> &command, int lineNum)
         else if(volunteer_role == "limited_collector"){
             string usage = "usage: volunteer <volunteer_name> limited_collector <volunteer_cooldown> <volunteer_maxOrders>";
 
-            if (!isValid(command, 5, lineNum, usage)){
+            if (!isValid(command, 5, lineNum, usage, true)){
                 return false;
             }
             int cooldown = csti(command[3], "volunteer_cooldown");
@@ -73,7 +46,7 @@ bool configWareHouse(WareHouse &warehouse, vector<string> &command, int lineNum)
         else if(volunteer_role == "driver"){
             string usage = "usage: volunteer <volunteer_name> driver <volunteer_maxDistance> <distance_per_step>";
 
-            if (!isValid(command, 5, lineNum, usage)){
+            if (!isValid(command, 5, lineNum, usage, true)){
                 return false;
             }
 
@@ -89,7 +62,7 @@ bool configWareHouse(WareHouse &warehouse, vector<string> &command, int lineNum)
         else if(volunteer_role == "limited_driver"){
             string usage = "usage: volunteer <volunteer_name> limited_driver <volunteer_maxDistance> <distance_per_step> <volunteer_maxOrders>";
 
-            if (!isValid(command, 6, lineNum, usage)){
+            if (!isValid(command, 6, lineNum, usage, true)){
                 return false;
             }
 
@@ -105,7 +78,7 @@ bool configWareHouse(WareHouse &warehouse, vector<string> &command, int lineNum)
         }
         
         else{
-            printError(lineNum);
+            printErrorAtLine(lineNum);
             cerr << "The volunteer role can only be: collector/ limited_collector/ driver/ limited_driver" << endl;
         }
         
@@ -113,7 +86,7 @@ bool configWareHouse(WareHouse &warehouse, vector<string> &command, int lineNum)
     }
 
     else{
-        printError(lineNum);
+        printErrorAtLine(lineNum);
         cerr << "You can only add volunteer and customer in your configuration file" << endl;
         return false;
     }
@@ -145,15 +118,18 @@ int digits(int num){
     return digits;
 }
 
-void printError(int lineNum){
+void printErrorAtLine(int lineNum){
     cerr << "The command at line: " << lineNum << ", isn't a valid command" << endl;
 }
 
-bool isValid(vector<string> &command, int size, int &lineNum, string &usage){
+bool isValid(vector<string> &command, int size, int &lineNum, string &usage, bool config){
     if (command.size() != size){
-        printError(lineNum);
+        if(config)
+            printErrorAtLine(lineNum);
         cerr << usage << endl;
         return false;
     }
     return true;
 }
+
+

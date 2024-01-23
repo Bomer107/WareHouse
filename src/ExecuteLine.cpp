@@ -1,8 +1,11 @@
 #include "../include/ExecuteLine.h"
 #include "../include/Action.h"
 
-bool executeCommand(vector <string> &command, WareHouse warehouse){
+bool executeCommand(vector <string> &command, WareHouse &warehouse){
     string &the_command = command[0];
+    if(the_command == "customer"){
+        addCustomerGeneral(warehouse, command, 0, false);
+    }
 
     if(the_command == "step"){
         if (command.size() != 2){
@@ -104,4 +107,37 @@ bool executeCommand(vector <string> &command, WareHouse warehouse){
         return false;
     }
 
+}
+
+bool addCustomerGeneral(WareHouse &warehouse, vector<string> &command, int lineNum, bool config){
+    string usage = "usage: customer <customer_name> <customer_type: solider/civilian> <customer_distance> <max_orders>";
+    if (!isValid(command, 5, lineNum, usage, config)){
+        return false;
+    }
+    string & customer_name = command[1];
+    string & customer_type = command[2];
+    int customer_distance = csti(command[3], "customer distance");
+    int max_orders = csti(command[4], "max_orders");
+    if(customer_distance < 1 || max_orders < 1){
+        return false;
+    }
+    if(config){
+        if (customer_type == "solider"){
+            warehouse.addCustomer
+            (new SoldierCustomer(warehouse.getNumCustomers(), customer_name, customer_distance, max_orders));
+            return true;
+        }
+        else if (customer_type == "civilian"){
+            warehouse.addCustomer
+            (new CivilianCustomer(warehouse.getNumCustomers(), customer_name, customer_distance, max_orders));
+            return true;
+        }
+        else{
+            printErrorAtLine(lineNum);
+            cerr << usage << endl;
+            return false;
+        }
+    }
+    AddCustomer * addCustomer = new AddCustomer(customer_name, customer_type, customer_distance, max_orders);
+    addCustomer->act(warehouse);
 }
