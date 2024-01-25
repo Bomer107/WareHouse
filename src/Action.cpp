@@ -45,8 +45,33 @@ BaseAction(), numOfSteps{numOfSteps}
 
 void SimulateStep::act(WareHouse &wareHouse)
 {
-
+   wareHouse.addAction(this);
+   vector<Volunteer*> &availableDriver=wareHouse.getAvailableDriver();
+   vector<Volunteer*> &availableCollector=wareHouse.getAvailableCollector();
+   vector<Order*> &pending=wareHouse.getPendingOrders();
+   vector<Order*> &inProccess=wareHouse.getInproccessOrders();
+   vector<Order*> &comleted=wareHouse.getCompleted();
+   vector<Volunteer*>volunteers= wareHouse.getVolunteers();
+   while (!pending.empty() && !availableCollector.empty()) {
+            Order *order = pending.back();
+            pending.pop_back();
+            Volunteer *volunteer = availableCollector.back();
+            availableCollector.pop_back();
+            volunteer->acceptOrder(*order);
+            inProccess.insert(order);
 }
+
+
+
+
+
+   for(Volunteer *volunteer:volunteers){
+      volunteer->step();
+      if(!volunteer->canMakeOrder())
+      
+
+
+   }
 
 std::string SimulateStep::toString() const
 {

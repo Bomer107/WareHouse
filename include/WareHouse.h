@@ -27,7 +27,12 @@ class WareHouse {
         Customer &getCustomer(int customerId) const;
         Volunteer &getVolunteer(int volunteerId) const;
         Order &getOrder(int orderId) const;
-        const vector<Order*> getPendingOrders() const;
+        vector <Volunteer*> &getAvailableCollector();
+        vector <Volunteer*> &getAvailableDriver();
+        vector<Order*> &getInproccessOrders() ;
+        vector<Order*> &getPendingOrders() ;
+        vector<Order*> &getCompleted();
+        vector<Volunteer*> &getVolunteers();
         const vector<BaseAction*> &getActions() const;
         void close();
         void open();
@@ -39,7 +44,8 @@ class WareHouse {
         vector<BaseAction*> actionsLog;
         vector<Volunteer*> volunteers;
         vector<Order*> allOrders;
-        vector<Volunteer*> availableVolunteers;
+        vector<Volunteer*>availableDriver;
+        vector<Volunteer*> availableCollector;
         vector<Order*> pendingOrders;
         vector<Order*> inProcessOrders;
         vector<Order*> completedOrders;
