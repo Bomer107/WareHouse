@@ -68,7 +68,7 @@ class LimitedCollectorVolunteer: public CollectorVolunteer {
         string toString() const override;
     
     private:
-        const int maxOrders; // The number of orders the volunteer can process in the whole simulation
+        const int maxOrders; // rders the volunteer can process in the whole simulationThe number of o
         int ordersLeft; // The number of orders the volunteer can still take
 };
 

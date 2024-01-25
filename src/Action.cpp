@@ -46,31 +46,43 @@ BaseAction(), numOfSteps{numOfSteps}
 void SimulateStep::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
-   vector<Volunteer*> &availableDriver = wareHouse.getAvailableDriver();
-   vector<Volunteer*> &availableCollector = wareHouse.getAvailableCollector();
-   vector<Order*> &pending = wareHouse.getPendingOrders();
-   vector<Order*> &inProccess = wareHouse.getInproccessOrders();
-   vector<Order*> &comleted = wareHouse.getCompleted();
-   vector<Volunteer*>volunteers = wareHouse.getVolunteers();
-   while (!pending.empty() && !availableCollector.empty()) {
-            Order *order = pending.back();
-            pending.pop_back();
-            Volunteer *volunteer = availableCollector.back();
-            availableCollector.pop_back();
-            volunteer->acceptOrder(*order);
-            inProccess.push_back(order);
-   }
-   for(Volunteer *volunteer:volunteers){
-      volunteer->step();
-      if(!volunteer->isBusy()){
+   
+   vector<Order*> &pending=wareHouse.getPendingOrders();
+   vector<Order*> &inProccess=wareHouse.getInproccessOrders();
+   vector<Order*> &comleted=wareHouse.getCompleted();
+   vector<Volunteer*>volunteers= wareHouse.getVolunteers();
+  
 
-      }
+
+
+
+   for (auto& obj : volunteers) {
+    obj->step();
+    if(obj->getActiveOrderId()==NO_ORDER){
+      int id=obj->getCompletedOrderId();
+      Order &order=wareHouse.getOrder(id);
+      order.setCollectorId(NO_VOLUNTEER);
+      order.setDriverId(NO_VOLUNTEER);
+      order.setfinish(true);
+    }
+   }
+   for (auto it = inProccess.begin(); it != inProccess.end();) {
+        if ((*it)->getfinish()) {
+            if((*it)->getStatus()==OrderStatus::COLLECTING){
+               pending.insert(pending.begin(), *it);
+            }
+            else if((*it)->getStatus()==OrderStatus::DELIVERING){
+               comleted.insert(comleted.begin(),*it);
+            }
+            it = inProccess.erase(it);
+        } else {
+            ++it;
+        }
+    }
+         
       
 
-
-   }
 }
-
 std::string SimulateStep::toString() const
 {
 
@@ -155,7 +167,7 @@ void AddCustomer::act(WareHouse &wareHouse){
 
 
 AddCustomer *AddCustomer:: clone() const{
-   string customerType = getcustomrType();
+   string customerType=getcustomrType();
    return new AddCustomer (customerName,customerType ,distance,maxOrders);
 
 }

@@ -11,7 +11,12 @@ CollectorVolunteer * CollectorVolunteer::clone() const
 
 void CollectorVolunteer::step()
 {
-
+   bool finish = decreaseCoolDown();
+   if(finish){
+    completedOrderId = activeOrderId;
+    activeOrderId = NO_ORDER;
+    
+   }
 }
 
 int CollectorVolunteer::getCoolDown() const
@@ -51,7 +56,9 @@ void CollectorVolunteer::acceptOrder(const Order &order)
 {
     completedOrderId = activeOrderId;
     activeOrderId = order.getId();
-    timeLeft = coolDown;   
+    timeLeft = coolDown;
+    
+
 }
 
 string CollectorVolunteer::toString() const

@@ -32,6 +32,8 @@ class Order {
         void setStatus(OrderStatus status);
         void setCollectorId(int collectorId);
         void setDriverId(int driverId);
+        void setfinish(bool wateFor);
+        bool getfinish();
         int getCollectorId() const;
         int getDriverId() const;
         OrderStatus getStatus() const;
@@ -44,4 +46,5 @@ class Order {
         OrderStatus status;
         int collectorId; //Initialized to NO_VOLUNTEER if no collector has been assigned yet
         int driverId; //Initialized to NO_VOLUNTEER if no driver has been assigned yet
+        bool finish;
 };
