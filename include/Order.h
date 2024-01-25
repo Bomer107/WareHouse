@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <sstream>
 using std::string;
 using std::vector;
 
+using namespace std;
 
 class Volunteer;
 
@@ -12,12 +14,6 @@ enum class OrderStatus {
     COLLECTING,
     DELIVERING,
     COMPLETED
-};
-
-class OrderStatusHandler
-{
-    public:
-        static string toString(OrderStatus OrderStatus);
 };
 
 #define NO_VOLUNTEER -1
@@ -35,6 +31,7 @@ class Order {
         int getCollectorId() const;
         int getDriverId() const;
         OrderStatus getStatus() const;
+        string getStatusString() const;
         const string toString() const;
 
     private:

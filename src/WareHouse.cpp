@@ -96,7 +96,8 @@ void WareHouse::start(){
         command.clear();
         cin >> line;
         parseString(line, command);
-        executeCommand(command, *this);
+        if(command.size() > 0)
+            executeCommand(command, *this);
     }
     
 }

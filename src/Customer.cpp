@@ -56,8 +56,8 @@ int Customer::addOrder(int orderId)
 }
 
 
-SoldierCustomer::SoldierCustomer(int id, string name, int locationDistance, int maxOrders)
-    : Customer(id, name, locationDistance, maxOrders)
+SoldierCustomer::SoldierCustomer(int id, string name, int locationDistance, int maxOrders): 
+Customer(id, name, locationDistance, maxOrders)
 {
 
 }

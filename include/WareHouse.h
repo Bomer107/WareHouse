@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 using namespace std;
-
+#include <iostream>
 #include "Order.h"
 #include "Customer.h"
 #include "Volunteer.h"
@@ -19,6 +19,12 @@ class WareHouse {
 
     public:
         WareHouse(const string &configFilePath);
+        ~WareHouse(); //Deconstrucor
+        WareHouse(const WareHouse& other); //Copy constructor
+        WareHouse& operator=(const WareHouse& other); //Copy Assignment Operator
+        WareHouse(WareHouse&& other) noexcept; //Move Constructor
+        WareHouse& operator=(WareHouse&& other) noexcept; //Move Assignment Operator
+        void clearWareHouse();
         void start();
         void addOrder(Order* order);
         void addAction(BaseAction* action);
@@ -27,9 +33,7 @@ class WareHouse {
         Customer &getCustomer(int customerId) const;
         Volunteer &getVolunteer(int volunteerId) const;
         Order &getOrder(int orderId) const;
-        vector <Volunteer*> &getAvailableCollector();
-        vector <Volunteer*> &getAvailableDriver();
-        vector<Order*> &getInproccessOrders() ;
+        vector<Order*> &getInproccessOrders();
         vector<Order*> &getPendingOrders() ;
         vector<Order*> &getCompleted();
         vector<Volunteer*> &getVolunteers();
@@ -39,13 +43,13 @@ class WareHouse {
         int getNumOrders() const;
         int getNumCustomers() const;
         int getNumVolunteers() const;
+        
+
     private:
         bool isOpen;
         vector<BaseAction*> actionsLog;
         vector<Volunteer*> volunteers;
         vector<Order*> allOrders;
-        vector<Volunteer*>availableDriver;
-        vector<Volunteer*> availableCollector;
         vector<Order*> pendingOrders;
         vector<Order*> inProcessOrders;
         vector<Order*> completedOrders;

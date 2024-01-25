@@ -1,5 +1,7 @@
 #pragma once
+extern WareHouse* backup;
 #include <string>
+#include <sstream>
 #include <vector>
 #include "WareHouse.h"
 using std::string;
@@ -23,6 +25,7 @@ class BaseAction{
         virtual void act(WareHouse& wareHouse)=0;
         virtual string toString() const=0;
         virtual BaseAction* clone() const=0;
+        string getStatusString() const;
 
     protected:
         void complete();

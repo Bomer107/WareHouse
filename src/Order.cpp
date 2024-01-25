@@ -53,17 +53,18 @@ OrderStatus Order::getStatus() const
 
 const string Order::toString() const
 {
-    string toString = "OrderId: " + id + '\n';
-    toString += "OrderStatus: " + OrderStatusHandler::toString(status) + '\n';
-    toString += "CustomerId: " + customerId + '\n';
-    toString += "Collector: " + collectorId + '\n';
-    toString += "Driver: " + driverId + '\n';
-    return toString;
+    stringstream ss;
+    ss << "OrderId: " << id << "\n" << 
+        "OrderStatus: " << getStatusString() << "\n" <<
+        "CustomerId: " << customerId << "\n" <<
+        "Collector: " << collectorId << "\n" <<
+        "Driver: " << driverId << "\n";
+    return ss.str();
 }
 
-string OrderStatusHandler::toString(OrderStatus OrderStatus)
+string Order::getStatusString() const
 {
-    switch (OrderStatus) 
+    switch (getStatus()) 
     {
         case OrderStatus::PENDING: return "PENDING";
         case OrderStatus::COLLECTING: return "COLLECTING";

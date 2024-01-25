@@ -25,6 +25,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         }
         AddOrder * addOrder = new AddOrder(customer_id);
         addOrder->act(warehouse);
+        
     }
 
     else if(the_command == "orderStatus"){
