@@ -3,7 +3,7 @@
 
 WareHouse::WareHouse(const string &configFilePath) :
 isOpen{false}, actionsLog{}, volunteers{}, pendingOrders{}, inProcessOrders{}, 
-completedOrders{}, customerCounter{}, volunteerCounter{}, allOrders{}, availableVolunteers{}
+completedOrders{}, customerCounter{}, volunteerCounter{}, allOrders{}
 {
     ifstream configFile {configFilePath};
     string line{};
@@ -19,11 +19,84 @@ completedOrders{}, customerCounter{}, volunteerCounter{}, allOrders{}, available
     configFile.close();   
 }
 
+WareHouse::~WareHouse() //Deconstructor
+{
+    clearWareHouse();
+}
+
+void WareHouse::clearWareHouse()
+{
+    for(BaseAction* action : actionsLog)
+        delete action;
+    for(Volunteer* volunteer : volunteers)
+        delete volunteer;
+    for(Order* order : allOrders)
+        delete order;
+    for(Customer* customer : customers)
+        delete customer;
+}
+
+//Copy constructor
+WareHouse::WareHouse(const WareHouse& other) : 
+isOpen{other.isOpen}, actionsLog{other.actionsLog}, volunteers{other.volunteers}, 
+pendingOrders{other.pendingOrders}, inProcessOrders{other.inProcessOrders}, 
+completedOrders{other.completedOrders}, customerCounter{other.customerCounter}, 
+volunteerCounter{other.volunteerCounter}, allOrders{other.allOrders}
+{}
+
+WareHouse& WareHouse::operator=(const WareHouse& other) //Copy Assignment Operator
+{
+    if(this != &other)
+    {
+        clearWareHouse();
+        isOpen = other.isOpen;
+        actionsLog = other.actionsLog;
+        volunteers = other.volunteers;
+        pendingOrders = other.pendingOrders;
+        inProcessOrders = other.inProcessOrders;
+        completedOrders = other.completedOrders; 
+        customerCounter = other.customerCounter; 
+        volunteerCounter = other.volunteerCounter; 
+        allOrders = other.allOrders;
+    }
+    return (*this);
+} 
+
+WareHouse::WareHouse(WareHouse&& other) noexcept :  //Move Constructor
+isOpen{other.isOpen}, actionsLog{move(other.actionsLog)}, volunteers{move(other.volunteers)}, 
+pendingOrders{move(other.pendingOrders)}, inProcessOrders{move(other.inProcessOrders)}, 
+completedOrders{move(other.completedOrders)}, customerCounter{move(other.customerCounter)}, 
+volunteerCounter{move(other.volunteerCounter)}, allOrders{move(other.allOrders)}
+{} 
+
+WareHouse& WareHouse::operator=(WareHouse&& other) noexcept //Move Assignment Operator
+{
+    if (this != &other)
+    {
+        clearWareHouse();
+        isOpen = other.isOpen;
+        actionsLog = move(other.actionsLog);
+        volunteers = move(other.volunteers);
+        pendingOrders = move(other.pendingOrders);
+        inProcessOrders = move(other.inProcessOrders);
+        completedOrders = move(other.completedOrders); 
+        customerCounter = move(other.customerCounter); 
+        volunteerCounter = move(other.volunteerCounter); 
+        allOrders = move(other.allOrders);
+    }
+    return (*this);
+}
+
 void WareHouse::start(){
     open();
+    string line{};
+    vector<string> command{};
     while (isOpen)
     {
-        /* code */
+        command.clear();
+        cin >> line;
+        parseString(line, command);
+        executeCommand(command, *this);
     }
     
 }
@@ -92,13 +165,13 @@ int WareHouse::getNumVolunteers() const
 
 void WareHouse::close()
 {
-
+    isOpen = false;
 }
 
 void WareHouse::open()
 {
     isOpen = true;
-    cout << "The WareHouse is open" << endl;
+    cout << "Warehouse is open!" << endl;
 }
 
 int WareHouse::getNumOrders() const
