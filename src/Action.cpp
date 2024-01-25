@@ -132,7 +132,7 @@ void AddCustomer::act(WareHouse &wareHouse){
 
 
 AddCustomer *AddCustomer:: clone() const{
-   string customerType=getcustomrType();
+   string customerType = getcustomrType();
    return new AddCustomer (customerName,customerType ,distance,maxOrders);
 
 }
