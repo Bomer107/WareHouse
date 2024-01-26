@@ -326,37 +326,7 @@ void PrintVolunteerStatus::act(WareHouse &wareHouse)
    wareHouse.addAction(this);
    if(VolunteerId < wareHouse.getNumVolunteers() && VolunteerId > -1){
       Volunteer &volunteer = wareHouse.getVolunteer(VolunteerId);
-      cout << "VolunteerID: " << volunteer.getId() << endl;
-      cout << boolalpha;
-      cout << "isBusy: " << volunteer.isBusy() << endl;
-      if (CollectorVolunteer* collector = dynamic_cast<CollectorVolunteer*>(&volunteer)){
-         cout << "TimeLeft: ";
-         if(collector->getTimeLeft() > 0)
-            cout << collector->getTimeLeft() << endl;
-         else
-            cout << "None" << endl;
-         cout << "OrdersLeft: ";
-         if (LimitedCollectorVolunteer* limitedCollector = dynamic_cast<LimitedCollectorVolunteer*>(collector)){
-            cout << limitedCollector->getNumOrdersLeft() << endl;
-         }
-         else
-            cout << "No Limit" << endl;
-         
-      }
-      else if (DriverVolunteer* driver = dynamic_cast<DriverVolunteer*>(&volunteer)){
-         cout << "DistanceLeft: ";
-         if(driver->getDistanceLeft() > 0)
-            cout << driver->getDistanceLeft() << endl;
-         else
-            cout << "None" << endl;
-
-         cout << "OrdersLeft: ";
-         if (LimitedDriverVolunteer* limitedDriver = dynamic_cast<LimitedDriverVolunteer*>(driver))
-            cout << limitedDriver->getNumOrdersLeft() << endl;
-         
-         else
-            cout << "No Limit" << endl;
-      }
+      cout << volunteer.toString();
       complete();
    }
    

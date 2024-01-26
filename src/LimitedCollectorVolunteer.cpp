@@ -37,5 +37,14 @@ int LimitedCollectorVolunteer::getNumOrdersLeft() const
 
 string LimitedCollectorVolunteer::toString() const
 {
-    return ("Limited Collector Volunteer " + getName() + ", id: " + std::to_string(getId()));
+    stringstream ss;
+    ss << "VolunteerID: " << getId() << "\n" <<
+        "isBusy: " << isBusy() << "\n"; 
+    ss << "TimeLeft: ";
+    if(getTimeLeft() > 0)
+        ss << getTimeLeft() << "\n";
+    else
+        ss << "None" << "\n";
+    ss << "OrdersLeft: " << getNumOrdersLeft();
+    return ss.str();
 }

@@ -58,5 +58,15 @@ void CollectorVolunteer::acceptOrder(const Order &order)
 
 string CollectorVolunteer::toString() const
 {
-    return ("Collector Volunteer " + getName() + ", id: " + std::to_string(getId()));
+    stringstream ss;
+    ss << "VolunteerID: " << getId() << "\n" <<
+        "isBusy: " << isBusy() << "\n";
+    ss << "TimeLeft: ";
+    if(getTimeLeft() > 0)
+        ss << getTimeLeft() << "\n";
+    else
+        ss << "None" << "\n";
+    ss << "OrdersLeft: No Limit";
+    return ss.str();
 }
+

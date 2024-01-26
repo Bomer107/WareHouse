@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <sstream>
 #include "Order.h"
 using std::string;
 using std::vector;

@@ -61,5 +61,14 @@ void DriverVolunteer::step()
 
 string DriverVolunteer::toString() const
 {
-    return ("Driver Volunteer " + getName() + ", id: " + std::to_string(getId()));
+    stringstream ss;
+    ss << "VolunteerID: " << getId() << "\n" <<
+        "isBusy: " << isBusy() << "\n";
+    ss << "Distance left: ";
+    if(getDistanceLeft() > 0)
+        ss << getDistanceLeft() << "\n";
+    else
+        ss << "None" << "\n";
+    ss << "OrdersLeft: No Limit";
+    return ss.str();
 }
