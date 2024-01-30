@@ -6,7 +6,9 @@ Volunteer(id, name), maxDistance{maxDistance}, distancePerStep{distancePerStep},
 
 DriverVolunteer * DriverVolunteer::clone() const
 {
-    return (new DriverVolunteer(getId(), getName(), getMaxDistance(), getDistancePerStep()));
+    DriverVolunteer * clone {new DriverVolunteer(getId(), getName(), getMaxDistance(), getDistancePerStep())};
+    clone->distanceLeft = distanceLeft;
+    return clone;
 }
 
 int DriverVolunteer::getDistanceLeft() const

@@ -1,9 +1,5 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <sstream>
-using std::string;
-using std::vector;
+#include "main.h"
 
 using namespace std;
 
@@ -22,10 +18,12 @@ class Order {
 
     public:
         Order(int id, int customerId, int distance);
+        Order* clone ();
         int getId() const;
         int getCustomerId() const;
         int getDistance() const;
         void setStatus(OrderStatus status);
+        void accepted(int id);
         void setCollectorId(int collectorId);
         void setDriverId(int driverId);
         void setfinish(bool wateFor);

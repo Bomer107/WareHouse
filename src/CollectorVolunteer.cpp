@@ -6,7 +6,9 @@ Volunteer(id, name), coolDown{coolDown}, timeLeft{NO_ORDER}
 
 CollectorVolunteer * CollectorVolunteer::clone() const
 {
-    return (new CollectorVolunteer(getId(), getName(), getCoolDown()));
+    CollectorVolunteer * clone {new CollectorVolunteer(getId(), getName(), getCoolDown())};
+    clone->timeLeft = timeLeft;
+    return clone;
 }
 
 void CollectorVolunteer::step()

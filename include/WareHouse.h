@@ -1,16 +1,12 @@
 #pragma once
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
-using namespace std;
-#include <iostream>
+#include "main.h"
+
 #include "Order.h"
 #include "Customer.h"
 #include "Volunteer.h"
+#include "Action.h"
 
-class BaseAction;
-class Volunteer;
+
 
 // Warehouse responsible for Volunteers, Customers Actions, and Orders.
 
@@ -25,6 +21,7 @@ class WareHouse {
         WareHouse(WareHouse&& other) noexcept; //Move Constructor
         WareHouse& operator=(WareHouse&& other) noexcept; //Move Assignment Operator
         void clearWareHouse();
+        void updateWareHouse(WareHouse other);
         void start();
         void addOrder(Order* order);
         void addAction(BaseAction* action);
@@ -33,6 +30,7 @@ class WareHouse {
         Customer &getCustomer(int customerId) const;
         Volunteer &getVolunteer(int volunteerId) const;
         Order &getOrder(int orderId) const;
+        BaseAction &getAction(int id) const;
         vector<Order*> &getInproccessOrders();
         vector<Order*> &getPendingOrders() ;
         vector<Order*> &getCompleted();

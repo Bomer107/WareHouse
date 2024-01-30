@@ -11,6 +11,7 @@ completedOrders{}, customerCounter{}, volunteerCounter{}, allOrders{}
     int lineNum = 1;
     while (getline(configFile, line))
     {
+        command.clear();
         parseString(line, command);
         if(command.size() > 0)
             configWareHouse(*this, command, lineNum);
@@ -34,30 +35,38 @@ void WareHouse::clearWareHouse()
         delete order;
     for(Customer* customer : customers)
         delete customer;
+
+    //cleans the vectors
+    actionsLog.clear();
+    volunteers.clear();
+    pendingOrders.clear();
+    inProcessOrders.clear();
+    completedOrders.clear();
+    allOrders.clear();
 }
 
 //Copy constructor
 WareHouse::WareHouse(const WareHouse& other) : 
-isOpen{other.isOpen}, actionsLog{other.actionsLog}, volunteers{other.volunteers}, 
+isOpen{other.isOpen}, actionsLog{other.actionsLog}, volunteers{}, 
 pendingOrders{other.pendingOrders}, inProcessOrders{other.inProcessOrders}, 
 completedOrders{other.completedOrders}, customerCounter{other.customerCounter}, 
-volunteerCounter{other.volunteerCounter}, allOrders{other.allOrders}
-{}
+volunteerCounter{other.volunteerCounter}, allOrders{}
+{
+    updateWareHouse(other);
+}
 
 WareHouse& WareHouse::operator=(const WareHouse& other) //Copy Assignment Operator
 {
     if(this != &other)
     {
-        clearWareHouse();
+        clearWareHouse(); // deletes memory from the heap
+
         isOpen = other.isOpen;
-        actionsLog = other.actionsLog;
-        volunteers = other.volunteers;
-        pendingOrders = other.pendingOrders;
-        inProcessOrders = other.inProcessOrders;
-        completedOrders = other.completedOrders; 
         customerCounter = other.customerCounter; 
         volunteerCounter = other.volunteerCounter; 
-        allOrders = other.allOrders;
+        updateWareHouse(other);
+
+        
     }
     return (*this);
 } 
@@ -159,6 +168,11 @@ Order & WareHouse::getOrder(int orderId) const
     return (*(allOrders.at(orderId)));
 }
 
+BaseAction & WareHouse::getAction(int id) const
+{
+    return *(actionsLog[id]);
+}
+
 int WareHouse::getNumVolunteers() const
 {
     return volunteerCounter;
@@ -183,4 +197,54 @@ int WareHouse::getNumOrders() const
 int WareHouse::getNumCustomers() const
 {
     return customerCounter;
+}
+
+vector<Order*> & WareHouse::getInproccessOrders()
+{
+    return inProcessOrders;
+}
+vector<Order*> & WareHouse::getPendingOrders()
+{
+    return pendingOrders;
+}
+vector<Order*> & WareHouse::getCompleted()
+{
+    return completedOrders;
+}
+vector<Volunteer*> & WareHouse::getVolunteers()
+{
+    return volunteers;
+}
+
+void WareHouse::updateWareHouse(WareHouse other){
+    for(int i{}; i < (other.actionsLog).size(); ++i){
+        actionsLog.push_back((other.getAction(i)).clone());
+    }
+
+    for(int i{}; i < other.getNumVolunteers(); ++i){
+        volunteers.push_back((other.getVolunteer(i)).clone());
+    }
+
+    for(int i{}; i < other.getNumOrders(); ++i){
+        Order * clone = (getOrder(i)).clone();
+        allOrders.push_back(clone);
+    }
+
+    for(int i{}; i < (other.pendingOrders).size(); ++i){
+        Order *order = (other.pendingOrders)[i];
+        Order * clone = (*order).clone();
+        pendingOrders.push_back(clone);
+    }
+
+    for(int i{}; i < (other.inProcessOrders).size(); ++i){
+        Order *order = (other.inProcessOrders)[i];
+        Order * clone = (*order).clone();
+        inProcessOrders.push_back(clone);
+    }
+    
+    for(int i{}; i < (other.completedOrders).size(); ++i){
+        Order *order = (other.completedOrders)[i];
+        Order * clone = (*order).clone();
+        completedOrders.push_back(clone);
+    }
 }

@@ -1,10 +1,9 @@
 #pragma once
+#include "main.h"
 #include <string>
 #include <vector>
 #include <sstream>
 #include "Order.h"
-using std::string;
-using std::vector;
 
 #define NO_ORDER -1
 

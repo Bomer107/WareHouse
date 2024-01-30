@@ -111,7 +111,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
 }
 
 bool addCustomerGeneral(WareHouse &warehouse, vector<string> &command, int lineNum, bool config){
-    string usage = "usage: customer <customer_name> <customer_type: solider/civilian> <customer_distance> <max_orders>";
+    string usage = "usage: customer <customer_name> <customer_type: soldier/civilian> <customer_distance> <max_orders>";
     if (!isValid(command, 5, lineNum, usage, config)){
         return false;
     }
@@ -123,7 +123,7 @@ bool addCustomerGeneral(WareHouse &warehouse, vector<string> &command, int lineN
         return false;
     }
     if(config){
-        if (customer_type == "solider"){
+        if (customer_type == "soldier"){
             warehouse.addCustomer
             (new SoldierCustomer(warehouse.getNumCustomers(), customer_name, customer_distance, max_orders));
             return true;

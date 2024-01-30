@@ -1,8 +1,5 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
+#include "main.h"
 
 using namespace std;
 

@@ -1,6 +1,4 @@
-#include "../include/Action.h"
-#include <iostream>   
-
+#include "../include/Action.h"  
 
 /*
 -----------------------------------------------------------------------------------------------------------------------
@@ -43,6 +41,11 @@ string BaseAction::getStatusString() const
    }
 }
 
+void BaseAction::setStatus(ActionStatus status)
+{
+   this->status = status;
+}
+
 /*
 -----------------------------------------------------------------------------------------------------------------------
 ----------------------------------SimulateStep-------------------------------------------------------------------------
@@ -58,66 +61,59 @@ void SimulateStep::act(WareHouse &wareHouse)
    wareHouse.addAction(this);
    vector<Order*> &pending = wareHouse.getPendingOrders();
    vector<Order*> &inProccess = wareHouse.getInproccessOrders();
-   vector<Order*> &comleted = wareHouse.getCompleted();
+   vector<Order*> &completed = wareHouse.getCompleted();
    vector<Volunteer*>volunteers = wareHouse.getVolunteers();
    for(int i{}; i < numOfSteps; ++i) {
 
       //assigning volunteers to orders
-      for(Order *order : pending){
-         for(int j{}; j < volunteers.size(); ++j){
+      for(vector<Order*>::iterator it = pending.begin(); it != pending.end();){
+         bool accepted{false};
+         for(int j{}; j < volunteers.size() && !accepted; ++j){
             Volunteer *volunteer = volunteers[j];
-            if(volunteer->canTakeOrder(*order))
-               volunteer->acceptOrder(*order);
-            
+            Order order = *(*it);
+            if(volunteer->canTakeOrder(order)){
+               accepted = true;
+               volunteer->acceptOrder(order);
+               order.accepted(volunteer->getId());
+               inProccess.push_back(&order);
+               it = pending.erase(it);
+            }
          }
+         if(!accepted)
+            ++it;
       }
 
-      vector<Order*> &pending=wareHouse.getPendingOrders();
-      vector<Order*> &inProccess=wareHouse.getInproccessOrders();
-      vector<Order*> &comleted=wareHouse.getCompleted();
-      vector<Volunteer*>volunteers= wareHouse.getVolunteers();
-      
-      for (auto& obj : volunteers) {
-         obj->step();
-         if(obj->getActiveOrderId()==NO_ORDER){
-            int id=obj->getCompletedOrderId();
-            Order &order=wareHouse.getOrder(id);
-            order.setCollectorId(NO_VOLUNTEER);
-            order.setDriverId(NO_VOLUNTEER);
+      for (Volunteer* volunteer : volunteers) {
+         volunteer->step();
+         if((volunteer->getActiveOrderId()) == NO_ORDER && (volunteer->getCompletedOrderId()) != NO_ORDER){
+            int id = volunteer->getCompletedOrderId();
+            Order &order = wareHouse.getOrder(id);
             order.setfinish(true);
          }
       }
-      for (auto it = inProccess.begin(); it != inProccess.end();) {
+
+      for (vector<Order*>::iterator it = inProccess.begin(); it != inProccess.end();) {
          if ((*it)->getfinish()) {
             if((*it)->getStatus()==OrderStatus::COLLECTING)
                pending.insert(pending.begin(), *it);
             
             else if((*it)->getStatus()==OrderStatus::DELIVERING)
-               comleted.insert(comleted.begin(),*it);
+               completed.insert(completed.begin(),*it);
             
             it = inProccess.erase(it);
          }
          else 
             ++it;
-         
       }
    }
 }
-   
-   
-
-
-
-
-   
-         
-      
-
-
 
 SimulateStep * SimulateStep::clone() const
 {
-
+   SimulateStep * clone {new SimulateStep(numOfSteps)};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
 }
 
 
@@ -163,7 +159,10 @@ void AddOrder::act(WareHouse &wareHouse)
 
 AddOrder * AddOrder::clone() const
 {
-   return (new AddOrder(customerId));
+   AddOrder * clone {new AddOrder(customerId)};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
 }
 
 string AddOrder::toString() const
@@ -195,7 +194,7 @@ BaseAction(), customerName{customerName}, customerType{}, distance{distance},max
 };
 
 void AddCustomer::act(WareHouse &wareHouse){
-   if(getErrorMsg() == ""){
+   if(getErrorMsg() != "The customer type you entered doesn't exist"){
       wareHouse.addAction(this);
       if(customerType == CustomerType::Soldier){
          Customer *customer{new SoldierCustomer(wareHouse.getNumCustomers(), customerName ,distance, maxOrders)};
@@ -213,7 +212,10 @@ void AddCustomer::act(WareHouse &wareHouse){
 
 AddCustomer *AddCustomer:: clone() const{
    string customerType = getcustomrType();
-   return new AddCustomer (customerName,customerType ,distance,maxOrders);
+   AddCustomer * clone {new AddCustomer (customerName,customerType ,distance,maxOrders)};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
 
 }
 
@@ -260,7 +262,11 @@ void PrintOrderStatus::act(WareHouse &wareHouse)
          
 PrintOrderStatus * PrintOrderStatus::clone() const
 {
-   return new PrintOrderStatus (orderId);
+   PrintOrderStatus* clone {new PrintOrderStatus (orderId)};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
+   
 }
 
 std::string PrintOrderStatus::toString() const 
@@ -302,7 +308,10 @@ void PrintCustomerStatus::act(WareHouse &wareHouse)
 
 PrintCustomerStatus * PrintCustomerStatus::clone() const
 {
-
+   PrintCustomerStatus * clone{new PrintCustomerStatus(customerId)};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
 }
 
 string PrintCustomerStatus::toString() const
@@ -339,7 +348,10 @@ void PrintVolunteerStatus::act(WareHouse &wareHouse)
 
 PrintVolunteerStatus * PrintVolunteerStatus::clone() const
 {
-
+   PrintVolunteerStatus * clone {new PrintVolunteerStatus(VolunteerId)};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
 }
 
 string PrintVolunteerStatus::toString() const
@@ -369,7 +381,10 @@ void PrintActionsLog::act(WareHouse &wareHouse)
 
 PrintActionsLog * PrintActionsLog::clone() const
 {
-
+   PrintActionsLog * clone {new PrintActionsLog()};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
 }
 
 string PrintActionsLog::toString() const
@@ -399,7 +414,10 @@ void Close::act(WareHouse &wareHouse)
         
 Close * Close::clone() const
 {
-
+   Close * clone {new Close()};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
 }
         
 string Close::toString() const
@@ -430,7 +448,10 @@ void BackupWareHouse::act(WareHouse &wareHouse)
         
 BackupWareHouse * BackupWareHouse::clone() const
 {
-   
+   BackupWareHouse * clone {new BackupWareHouse()};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
 }
         
 string BackupWareHouse::toString() const
@@ -453,7 +474,7 @@ void RestoreWareHouse::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
    if(backup != nullptr){
-      wareHouse = move(backup);
+      wareHouse = *backup;
       complete();
    }
    else{
@@ -464,7 +485,10 @@ void RestoreWareHouse::act(WareHouse &wareHouse)
         
 RestoreWareHouse * RestoreWareHouse::clone() const
 {
-
+   RestoreWareHouse * clone {new RestoreWareHouse()};
+   clone->error(getErrorMsg());
+   clone->setStatus(getStatus());
+   return clone;
 }
         
 string RestoreWareHouse::toString() const

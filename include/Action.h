@@ -1,11 +1,8 @@
 #pragma once
-extern WareHouse* backup;
-#include <string>
-#include <sstream>
-#include <vector>
 #include "WareHouse.h"
-using std::string;
-using std::vector;
+#include "main.h"
+extern WareHouse* backup;
+
 
 enum class ActionStatus{
     COMPLETED, ERROR
@@ -31,6 +28,7 @@ class BaseAction{
         void complete();
         void error(string errorMsg);
         string getErrorMsg() const;
+        void setStatus(ActionStatus status);
 
     private:
         string errorMsg;

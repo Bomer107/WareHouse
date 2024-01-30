@@ -6,7 +6,8 @@ CollectorVolunteer(id, name, coolDown), maxOrders{maxOrders}, ordersLeft{maxOrde
 
 LimitedCollectorVolunteer * LimitedCollectorVolunteer::clone() const
 {
-    return (new LimitedCollectorVolunteer(getId(), getName(), getCoolDown(), getMaxOrders()));
+    LimitedCollectorVolunteer * clone {new LimitedCollectorVolunteer(getId(), getName(), getCoolDown(), getMaxOrders())};
+    clone->ordersLeft = ordersLeft;
 }
 
 bool LimitedCollectorVolunteer::hasOrdersLeft() const
