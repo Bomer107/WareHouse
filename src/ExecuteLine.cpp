@@ -107,7 +107,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         cerr << "This command isn't a valid command" << endl;
         return false;
     }
-
+    return true;
 }
 
 bool addCustomerGeneral(WareHouse &warehouse, vector<string> &command, int lineNum, bool config){
@@ -122,23 +122,25 @@ bool addCustomerGeneral(WareHouse &warehouse, vector<string> &command, int lineN
     if(customer_distance < 1 || max_orders < 1){
         return false;
     }
+    if(customer_type == "soldier" || customer_type == "customer"){
+        if(config)
+            printErrorAtLine(lineNum);
+        cerr << usage << endl;
+        return false;
+    }
     if(config){
         if (customer_type == "soldier"){
             warehouse.addCustomer
             (new SoldierCustomer(warehouse.getNumCustomers(), customer_name, customer_distance, max_orders));
             return true;
         }
-        else if (customer_type == "civilian"){
+        else{
             warehouse.addCustomer
             (new CivilianCustomer(warehouse.getNumCustomers(), customer_name, customer_distance, max_orders));
             return true;
         }
-        else{
-            printErrorAtLine(lineNum);
-            cerr << usage << endl;
-            return false;
-        }
     }
     AddCustomer * addCustomer = new AddCustomer(customer_name, customer_type, customer_distance, max_orders);
     addCustomer->act(warehouse);
+    return true;
 }

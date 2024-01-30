@@ -2,8 +2,8 @@
 #include "../include/ExecuteLine.h"
 
 WareHouse::WareHouse(const string &configFilePath) :
-isOpen{false}, actionsLog{}, volunteers{}, pendingOrders{}, inProcessOrders{}, 
-completedOrders{}, customerCounter{}, volunteerCounter{}, allOrders{}
+isOpen{false}, actionsLog{}, volunteers{}, allOrders{}, pendingOrders{}, inProcessOrders{},
+completedOrders{}, customers{}, customerCounter{}, volunteerCounter{}
 {
     ifstream configFile {configFilePath};
     string line{};
@@ -37,6 +37,7 @@ void WareHouse::clearWareHouse()
         delete customer;
 
     //cleans the vectors
+    customers.clear();
     actionsLog.clear();
     volunteers.clear();
     pendingOrders.clear();
@@ -47,10 +48,11 @@ void WareHouse::clearWareHouse()
 
 //Copy constructor
 WareHouse::WareHouse(const WareHouse& other) : 
-isOpen{other.isOpen}, actionsLog{other.actionsLog}, volunteers{}, 
-pendingOrders{other.pendingOrders}, inProcessOrders{other.inProcessOrders}, 
-completedOrders{other.completedOrders}, customerCounter{other.customerCounter}, 
-volunteerCounter{other.volunteerCounter}, allOrders{}
+isOpen{other.isOpen}, actionsLog{other.actionsLog}, volunteers{other.volunteers},
+allOrders{other.allOrders}, pendingOrders{other.pendingOrders}, 
+inProcessOrders{other.inProcessOrders}, completedOrders{other.completedOrders}, 
+customers(other.customers), customerCounter{other.customerCounter}, 
+volunteerCounter{other.volunteerCounter}
 {
     updateWareHouse(other);
 }
@@ -72,10 +74,11 @@ WareHouse& WareHouse::operator=(const WareHouse& other) //Copy Assignment Operat
 } 
 
 WareHouse::WareHouse(WareHouse&& other) noexcept :  //Move Constructor
-isOpen{other.isOpen}, actionsLog{move(other.actionsLog)}, volunteers{move(other.volunteers)}, 
-pendingOrders{move(other.pendingOrders)}, inProcessOrders{move(other.inProcessOrders)}, 
-completedOrders{move(other.completedOrders)}, customerCounter{move(other.customerCounter)}, 
-volunteerCounter{move(other.volunteerCounter)}, allOrders{move(other.allOrders)}
+isOpen{other.isOpen}, actionsLog{move(other.actionsLog)}, volunteers{move(other.volunteers)},
+allOrders{move(other.allOrders)}, pendingOrders{move(other.pendingOrders)}, 
+inProcessOrders{move(other.inProcessOrders)}, completedOrders{move(other.completedOrders)}, 
+customers(move(other.customers)), customerCounter{move(other.customerCounter)}, 
+volunteerCounter{move(other.volunteerCounter)}
 {} 
 
 WareHouse& WareHouse::operator=(WareHouse&& other) noexcept //Move Assignment Operator
@@ -217,7 +220,7 @@ vector<Volunteer*> & WareHouse::getVolunteers()
 }
 
 void WareHouse::updateWareHouse(WareHouse other){
-    for(int i{}; i < (other.actionsLog).size(); ++i){
+    for(size_t i{}; i < (other.actionsLog).size(); ++i){
         actionsLog.push_back((other.getAction(i)).clone());
     }
 
@@ -230,19 +233,19 @@ void WareHouse::updateWareHouse(WareHouse other){
         allOrders.push_back(clone);
     }
 
-    for(int i{}; i < (other.pendingOrders).size(); ++i){
+    for(size_t i{}; i < (other.pendingOrders).size(); ++i){
         Order *order = (other.pendingOrders)[i];
         Order * clone = (*order).clone();
         pendingOrders.push_back(clone);
     }
 
-    for(int i{}; i < (other.inProcessOrders).size(); ++i){
+    for(size_t i{}; i < (other.inProcessOrders).size(); ++i){
         Order *order = (other.inProcessOrders)[i];
         Order * clone = (*order).clone();
         inProcessOrders.push_back(clone);
     }
     
-    for(int i{}; i < (other.completedOrders).size(); ++i){
+    for(size_t i{}; i < (other.completedOrders).size(); ++i){
         Order *order = (other.completedOrders)[i];
         Order * clone = (*order).clone();
         completedOrders.push_back(clone);

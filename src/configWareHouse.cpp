@@ -84,12 +84,12 @@ bool configWareHouse(WareHouse &warehouse, vector<string> &command, int lineNum)
         
 
     }
-
     else{
         printErrorAtLine(lineNum);
         cerr << "You can only add volunteer and customer in your configuration file" << endl;
         return false;
     }
+    return true;
 }
 
 // Convert String To Int
@@ -102,15 +102,15 @@ int csti(string &s, string parameter){
         }
         return x;
     }
-    catch(invalid_argument){
+    catch(invalid_argument const&){
         cout << parameter << " has to be an integer" << endl;
         return -1;
     }
 }
 
 // created because of stoi behaviors
-int digits(int num){
-    int digits = 0;
+size_t digits(int num){
+    size_t digits = 0;
     while (num != 0){
         num /= 10;
         digits++;
@@ -122,7 +122,7 @@ void printErrorAtLine(int lineNum){
     cerr << "The command at line: " << lineNum << ", isn't a valid command" << endl;
 }
 
-bool isValid(vector<string> &command, int size, int &lineNum, string &usage, bool config){
+bool isValid(vector<string> &command, size_t size, int &lineNum, string &usage, bool config){
     if (command.size() != size){
         if(config)
             printErrorAtLine(lineNum);

@@ -1,5 +1,14 @@
 #include "../include/Action.h"  
 
+
+CustomerType getCustomerType(string customerType)
+{
+     if(customerType == "soldier")
+        return CustomerType::Soldier;
+    else
+        return CustomerType::Civilian;
+}
+
 /*
 -----------------------------------------------------------------------------------------------------------------------
 ----------------------------------BaseAction---------------------------------------------------------------------------
@@ -68,7 +77,7 @@ void SimulateStep::act(WareHouse &wareHouse)
       //assigning volunteers to orders
       for(vector<Order*>::iterator it = pending.begin(); it != pending.end();){
          bool accepted{false};
-         for(int j{}; j < volunteers.size() && !accepted; ++j){
+         for(size_t j{}; j < volunteers.size() && !accepted; ++j){
             Volunteer *volunteer = volunteers[j];
             Order order = *(*it);
             if(volunteer->canTakeOrder(order)){
@@ -144,6 +153,7 @@ void AddOrder::act(WareHouse &wareHouse)
          int id {customerId};
          Order* order {new Order(numOrder,id,distance)};
          wareHouse.addOrder(order);
+         customer.addOrder(order->getId());
          complete();
       }
       else{
@@ -179,19 +189,8 @@ string AddOrder::toString() const
 */
 
 AddCustomer::AddCustomer(string customerName, string customerType, int distance, int maxOrders):
-BaseAction(), customerName{customerName}, customerType{}, distance{distance},maxOrders{maxOrders}
-{ 
-   if (customerType == "soldier") {
-      const CustomerType customerType = CustomerType::Soldier;
-   } 
-   else if (customerType == "civilian"){
-      const CustomerType customerType = CustomerType::Civilian; 
-   }
-   else{
-      error("The customer type you entered doesn't exist");
-      cout << getErrorMsg() << endl;
-   }
-};
+BaseAction(), customerName{customerName}, customerType{getCustomerType(customerType)}, distance{distance},maxOrders{maxOrders}
+{}
 
 void AddCustomer::act(WareHouse &wareHouse){
    if(getErrorMsg() != "The customer type you entered doesn't exist"){
@@ -242,15 +241,15 @@ string AddCustomer::getcustomrType() const
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-PrintOrderStatus:: PrintOrderStatus(int id):orderId{id}
+PrintOrderStatus::PrintOrderStatus(int id):orderId{id}, order{}
 {}
 
 void PrintOrderStatus::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
    if(orderId < wareHouse.getNumOrders() && orderId > -1){
-      Order &order = wareHouse.getOrder(orderId);
-      cout << order.toString();
+      order = &(wareHouse.getOrder(orderId));
+      cout << order->toString();
       complete();
    }
    else
@@ -373,7 +372,7 @@ void PrintActionsLog::act(WareHouse &wareHouse)
 {
    vector<BaseAction *> actions = wareHouse.getActions();
    for(BaseAction * action: actions)
-      cout << action->toString();
+      cout << action->toString() << endl;
 
    wareHouse.addAction(this);
    complete();

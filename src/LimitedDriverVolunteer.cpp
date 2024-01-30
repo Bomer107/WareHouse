@@ -7,7 +7,9 @@ DriverVolunteer(id, name, maxDistance, distancePerStep), maxOrders{maxOrders}, o
 
 LimitedDriverVolunteer * LimitedDriverVolunteer::clone() const
 {
-    LimitedDriverVolunteer * clone {};
+    LimitedDriverVolunteer * clone {new LimitedDriverVolunteer(getId(), getName(), getMaxDistance(), getDistancePerStep(), getMaxOrders())};
+    clone->ordersLeft = getNumOrdersLeft();
+    return clone;
 }
 
 int LimitedDriverVolunteer::getMaxOrders() const

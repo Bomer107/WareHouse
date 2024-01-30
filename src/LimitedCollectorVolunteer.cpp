@@ -8,6 +8,7 @@ LimitedCollectorVolunteer * LimitedCollectorVolunteer::clone() const
 {
     LimitedCollectorVolunteer * clone {new LimitedCollectorVolunteer(getId(), getName(), getCoolDown(), getMaxOrders())};
     clone->ordersLeft = ordersLeft;
+    return clone;
 }
 
 bool LimitedCollectorVolunteer::hasOrdersLeft() const

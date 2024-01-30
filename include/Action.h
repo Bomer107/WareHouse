@@ -15,6 +15,8 @@ enum class CustomerType{
 
 class Customer;
 
+CustomerType getCustomerType(string customerType);
+
 class BaseAction{
     public:
         BaseAction();
@@ -64,7 +66,6 @@ class AddCustomer : public BaseAction {
         void act(WareHouse &wareHouse) override;
         AddCustomer *clone() const override;
         string toString() const override;
-        
         string getcustomrType() const;
         
     private:

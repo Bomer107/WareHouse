@@ -44,15 +44,10 @@ int Customer::addOrder(int orderId)
 {
     if(canMakeOrder() && orderId > 0)
     {
-        bool canMakeOrder {true};
-        for(int order : ordersId)
-        {
-            if(order == orderId)
-                canMakeOrder = false;
-        }
-        if(canMakeOrder)
-            ordersId.push_back(orderId);
+        ordersId.push_back(orderId);
+        return orderId; 
     }
+    return -1;
 }
 
 
