@@ -106,7 +106,7 @@ void WareHouse::start(){
     while (isOpen)
     {
         command.clear();
-        cin >> line;
+        getline(cin, line);
         parseString(line, command);
         if(command.size() > 0)
             executeCommand(command, *this);
@@ -219,7 +219,7 @@ vector<Volunteer*> & WareHouse::getVolunteers()
     return volunteers;
 }
 
-void WareHouse::updateWareHouse(WareHouse other){
+void WareHouse::updateWareHouse(const WareHouse &other){
     for(size_t i{}; i < (other.actionsLog).size(); ++i){
         actionsLog.push_back((other.getAction(i)).clone());
     }

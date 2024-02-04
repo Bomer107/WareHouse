@@ -18,7 +18,7 @@ class Order {
 
     public:
         Order(int id, int customerId, int distance);
-        Order* clone ();
+        Order* clone () const;
         int getId() const;
         int getCustomerId() const;
         int getDistance() const;
@@ -27,7 +27,7 @@ class Order {
         void setCollectorId(int collectorId);
         void setDriverId(int driverId);
         void setfinish(bool wateFor);
-        bool getfinish();
+        bool getfinish() const;
         int getCollectorId() const;
         int getDriverId() const;
         OrderStatus getStatus() const;

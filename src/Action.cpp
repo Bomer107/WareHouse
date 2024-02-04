@@ -241,14 +241,14 @@ string AddCustomer::getcustomrType() const
 -----------------------------------------------------------------------------------------------------------------------
 */
 
-PrintOrderStatus::PrintOrderStatus(int id):orderId{id}, order{}
+PrintOrderStatus::PrintOrderStatus(int id):orderId{id}
 {}
 
 void PrintOrderStatus::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
    if(orderId < wareHouse.getNumOrders() && orderId > -1){
-      order = &(wareHouse.getOrder(orderId));
+      Order * order = &(wareHouse.getOrder(orderId));
       cout << order->toString();
       complete();
    }
@@ -268,7 +268,7 @@ PrintOrderStatus * PrintOrderStatus::clone() const
    
 }
 
-std::string PrintOrderStatus::toString() const 
+string PrintOrderStatus::toString() const 
 { 
    stringstream ss;
    ss << "orderStatus " << orderId << " " << getStatusString();
@@ -290,7 +290,7 @@ void PrintCustomerStatus::act(WareHouse &wareHouse)
    if(customerId < wareHouse.getNumCustomers() && customerId > -1){
       Customer &customer = wareHouse.getCustomer(customerId);
       cout << "CustomerID: " << customer.getId() << endl;
-      vector<int> customerOrders {customer.getOrdersId()};
+      vector<int> customerOrders {customer.getOrdersIds()};
       for(int orderID : customerOrders){
          cout << "OrderID: " << orderID << endl;
          cout << "OrderStatus: " << (wareHouse.getOrder(orderID)).getStatusString() << endl;

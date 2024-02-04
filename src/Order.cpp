@@ -6,7 +6,7 @@ status{OrderStatus::PENDING}, collectorId{NO_VOLUNTEER}, driverId{NO_VOLUNTEER},
 finish(false)
 {}
 
-Order * Order::clone()
+Order * Order::clone() const
 {
     Order * clone {new Order(getId(), getCustomerId(), getDistance())};
     clone->status = getStatus();
@@ -21,7 +21,7 @@ void Order::setfinish(bool wateFor)
     finish = wateFor;
 }
 
-bool Order::getfinish()
+bool Order::getfinish() const
 {
     return finish;
 }

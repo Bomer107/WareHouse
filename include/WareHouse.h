@@ -21,7 +21,7 @@ class WareHouse {
         WareHouse(WareHouse&& other) noexcept; //Move Constructor
         WareHouse& operator=(WareHouse&& other) noexcept; //Move Assignment Operator
         void clearWareHouse();
-        void updateWareHouse(WareHouse other);
+        void updateWareHouse(const WareHouse &other);
         void start();
         void addOrder(Order* order);
         void addAction(BaseAction* action);

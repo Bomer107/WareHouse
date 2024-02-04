@@ -7,7 +7,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         addCustomerGeneral(warehouse, command, 0, false);
     }
 
-    if(the_command == "step"){
+    else if(the_command == "step"){
         if (command.size() != 2){
             cerr << "usage: step <number_of_steps>" << endl;
             return -1;
@@ -122,7 +122,7 @@ bool addCustomerGeneral(WareHouse &warehouse, vector<string> &command, int lineN
     if(customer_distance < 1 || max_orders < 1){
         return false;
     }
-    if(customer_type == "soldier" || customer_type == "customer"){
+    if(customer_type != "soldier" && customer_type != "civilian"){
         if(config)
             printErrorAtLine(lineNum);
         cerr << usage << endl;
