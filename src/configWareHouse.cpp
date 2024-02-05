@@ -97,7 +97,7 @@ int csti(string &s, string parameter){
     try{
         int x = stoi(s);
         if(digits(x) != s.size()){
-            cout << parameter << " has to be a positive integer" << endl;
+            cout << parameter << " error in the number you sent" << endl;
             return -1;
         }
         return x;
@@ -110,6 +110,8 @@ int csti(string &s, string parameter){
 
 // created because of stoi behaviors
 size_t digits(int num){
+    if (num == 0)
+        return 1;
     size_t digits = 0;
     while (num != 0){
         num /= 10;

@@ -12,6 +12,9 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
             cerr << "usage: step <number_of_steps>" << endl;
             return -1;
         }
+        int number_of_steps = csti(command[1], "number_of_steps");
+        SimulateStep * simulateStep = new SimulateStep(number_of_steps);
+        simulateStep->act(warehouse);
     }
 
     else if(the_command == "order"){

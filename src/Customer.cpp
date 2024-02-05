@@ -42,7 +42,7 @@ const vector<int> & Customer::getOrdersIds() const
 
 int Customer::addOrder(int orderId)
 {
-    if(canMakeOrder() && orderId > 0)
+    if(canMakeOrder() && orderId > -1)
     {
         ordersId.push_back(orderId);
         return orderId; 
