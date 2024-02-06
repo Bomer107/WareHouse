@@ -79,7 +79,7 @@ void SimulateStep::act(WareHouse &wareHouse)
          bool accepted{false};
          for(size_t j{}; j < volunteers.size() && !accepted; ++j){
             Volunteer *volunteer = volunteers[j];
-            Order order = *(*it);
+            Order& order = *(*it);
             if(volunteer->canTakeOrder(order)){
                accepted = true;
                volunteer->acceptOrder(order);
@@ -437,11 +437,11 @@ BackupWareHouse::BackupWareHouse(){}
         
 void BackupWareHouse::act(WareHouse &wareHouse)
 {
-   wareHouse.addAction(this);
    if (backup == nullptr)
       backup = new WareHouse{wareHouse};
    else
       (*backup) = wareHouse;
+   wareHouse.addAction(this);
    complete();
 }
         

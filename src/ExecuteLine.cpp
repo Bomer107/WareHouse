@@ -25,6 +25,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         int customer_id = csti(command[1], "customer_id");
         if(customer_id < 0){
             cerr << "customer_id has to be a non-negative number" << endl;
+            return -1;
         }
         AddOrder * addOrder = new AddOrder(customer_id);
         addOrder->act(warehouse);
@@ -39,6 +40,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         int order_id = csti(command[1], "order_id");
         if(order_id < 0){
             cerr << "order_id has to be a non-negative number" << endl;
+            return -1;
         }
         PrintOrderStatus * printOrderStatus = new PrintOrderStatus(order_id);
         printOrderStatus->act(warehouse);
@@ -52,6 +54,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         int customer_id = csti(command[1], "customer_id");
         if(customer_id < 0){
             cerr << "customer_id has to be a non-negative number" << endl;
+            return -1;
         }
         PrintCustomerStatus * printCustomerStatus = new PrintCustomerStatus(customer_id);
         printCustomerStatus->act(warehouse);
@@ -65,6 +68,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         int volunteer_id = csti(command[1], "volunteer_id");
         if(volunteer_id < 0){
             cerr << "volunteer_id has to be a non-negative number" << endl;
+            return -1;
         }
         PrintVolunteerStatus * printVolunteerStatus = new PrintVolunteerStatus(volunteer_id);
         printVolunteerStatus->act(warehouse);
