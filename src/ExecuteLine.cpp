@@ -42,7 +42,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
             cerr << "order_id has to be a non-negative number" << endl;
             return -1;
         }
-        PrintOrderStatus * printOrderStatus = new PrintOrderStatus(order_id);
+        PrintOrderStatus * printOrderStatus {new PrintOrderStatus(order_id)};
         printOrderStatus->act(warehouse);
     }
 

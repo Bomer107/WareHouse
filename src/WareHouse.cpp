@@ -48,11 +48,11 @@ void WareHouse::clearWareHouse()
 
 //Copy constructor
 WareHouse::WareHouse(const WareHouse& other) : 
-isOpen{other.isOpen}, actionsLog{other.actionsLog}, volunteers{other.volunteers},
-allOrders{other.allOrders}, pendingOrders{other.pendingOrders}, 
-inProcessOrders{other.inProcessOrders}, completedOrders{other.completedOrders}, 
-customers(other.customers), customerCounter{other.customerCounter}, 
-volunteerCounter{other.volunteerCounter}
+isOpen{}, actionsLog{}, volunteers{},
+allOrders{}, pendingOrders{}, 
+inProcessOrders{}, completedOrders{}, 
+customers(), customerCounter{}, 
+volunteerCounter{}
 {
     updateWareHouse(other);
 }
@@ -229,7 +229,7 @@ void WareHouse::updateWareHouse(const WareHouse &other){
     }
 
     for(int i{}; i < other.getNumOrders(); ++i){
-        Order * clone = (getOrder(i)).clone();
+        Order * clone = (other.getOrder(i)).clone();
         allOrders.push_back(clone);
     }
 
