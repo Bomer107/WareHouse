@@ -97,7 +97,7 @@ int csti(string &s, string parameter){
     try{
         int x = stoi(s);
         if(digits(x) != s.size()){
-            cout << parameter << " error in the number you sent" << endl;
+            cout << "error in the " << parameter << " you sent" << endl;
             return -1;
         }
         return x;

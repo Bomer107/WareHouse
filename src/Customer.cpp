@@ -60,7 +60,7 @@ Customer(id, name, locationDistance, maxOrders)
 SoldierCustomer *SoldierCustomer::clone() const
 {
     SoldierCustomer * clone {new SoldierCustomer{getId(), getName(), getCustomerDistance(), getMaxOrders()}};
-    vector<int> orders{getOrdersIds()};
+    const vector<int> & orders{getOrdersIds()};
     for (int order: orders)
         clone->addOrder(order);
     return clone;
@@ -75,7 +75,7 @@ Customer(id, name, locationDistance, maxOrders)
 CivilianCustomer *CivilianCustomer::clone() const
 {
     CivilianCustomer * clone {new CivilianCustomer{getId(), getName(), getCustomerDistance(), getMaxOrders()}};
-    vector<int> orders{getOrdersIds()};
+    const vector<int> & orders{getOrdersIds()};
     for (int order: orders)
         clone->addOrder(order);
     return clone;

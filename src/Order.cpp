@@ -46,7 +46,7 @@ void Order::setStatus(OrderStatus status)
     Order::status = status;
 }
 
-void Order::accepted(int id)
+void Order::update(int id)
 {
     switch (getStatus())
     {
@@ -97,9 +97,19 @@ const string Order::toString() const
     stringstream ss;
     ss << "OrderId: " << id << "\n" << 
         "OrderStatus: " << getStatusString() << "\n" <<
-        "CustomerId: " << customerId << "\n" <<
-        "Collector: " << collectorId << "\n" <<
-        "Driver: " << driverId << "\n";
+        "CustomerID: " << customerId << "\n" <<
+        "Collector: ";
+    if(collectorId < 0)
+        ss << "None";
+    else
+        ss << collectorId;
+
+    ss << "\n" << 
+        "Driver: ";
+    if(driverId < 0)
+        ss << "None";
+    else
+        ss << driverId;
     return ss.str();
 }
 

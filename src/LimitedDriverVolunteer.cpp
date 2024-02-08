@@ -42,7 +42,14 @@ string LimitedDriverVolunteer::toString() const
 {
     stringstream ss;
     ss << "VolunteerID: " << getId() << "\n" <<
-        "isBusy: " << isBusy() << "\n";
+        "isBusy: ";
+    if(isBusy()){
+        ss << "True" << "\n";
+        ss << "OrderId: " << getActiveOrderId();
+    }
+    else
+        ss << "False";
+    ss<< "\n";
     ss << "Distance left: ";
     if(getDistanceLeft() > 0)
         ss << getDistanceLeft() << "\n";

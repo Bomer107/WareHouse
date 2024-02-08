@@ -41,7 +41,14 @@ string LimitedCollectorVolunteer::toString() const
 {
     stringstream ss;
     ss << "VolunteerID: " << getId() << "\n" <<
-        "isBusy: " << isBusy() << "\n"; 
+        "isBusy: ";
+    if(isBusy()){
+        ss << "True" << "\n";
+        ss << "OrderId: " << getActiveOrderId();
+    }
+    else
+        ss << "False";
+    ss<< "\n";
     ss << "TimeLeft: ";
     if(getTimeLeft() > 0)
         ss << getTimeLeft() << "\n";

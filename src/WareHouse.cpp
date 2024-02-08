@@ -3,7 +3,8 @@
 
 WareHouse::WareHouse(const string &configFilePath) :
 isOpen{false}, actionsLog{}, volunteers{}, allOrders{}, pendingOrders{}, inProcessOrders{},
-completedOrders{}, customers{}, customerCounter{}, volunteerCounter{}
+completedOrders{}, customers{}, doesntExist{new CollectorVolunteer(-1, "doesn't exist", -1)},
+customerCounter{}, volunteerCounter{}
 {
     ifstream configFile {configFilePath};
     string line{};
@@ -22,28 +23,35 @@ completedOrders{}, customers{}, customerCounter{}, volunteerCounter{}
 
 WareHouse::~WareHouse() //Deconstructor
 {
-    clearWareHouse();
+    deleteWareHouse(*this);
 }
 
-void WareHouse::clearWareHouse()
+void WareHouse::deleteWareHouse(WareHouse &wareHouse)
 {
-    for(BaseAction* action : actionsLog)
+    for(BaseAction* action : wareHouse.actionsLog)
         delete action;
-    for(Volunteer* volunteer : volunteers)
-        delete volunteer;
-    for(Order* order : allOrders)
+    for(Volunteer* volunteer : wareHouse.volunteers)
+        if(volunteer)
+            delete volunteer;
+    for(Order* order : wareHouse.allOrders)
         delete order;
-    for(Customer* customer : customers)
+    for(Customer* customer : wareHouse.customers)
         delete customer;
 
-    //cleans the vectors
-    customers.clear();
-    actionsLog.clear();
-    volunteers.clear();
-    pendingOrders.clear();
-    inProcessOrders.clear();
-    completedOrders.clear();
-    allOrders.clear();
+    delete wareHouse.doesntExist;
+    clearWareHouse(wareHouse);
+    
+}
+
+void WareHouse::clearWareHouse(WareHouse &wareHouse)
+{
+    (wareHouse.customers).clear();
+    (wareHouse.actionsLog).clear();
+    (wareHouse.volunteers).clear();
+    (wareHouse.pendingOrders).clear();
+    (wareHouse.inProcessOrders).clear();
+    (wareHouse.completedOrders).clear();
+    (wareHouse.allOrders).clear();
 }
 
 //Copy constructor
@@ -51,8 +59,8 @@ WareHouse::WareHouse(const WareHouse& other) :
 isOpen{}, actionsLog{}, volunteers{},
 allOrders{}, pendingOrders{}, 
 inProcessOrders{}, completedOrders{}, 
-customers(), customerCounter{}, 
-volunteerCounter{}
+customers(), doesntExist{},
+customerCounter{}, volunteerCounter{}
 {
     updateWareHouse(other);
 }
@@ -61,14 +69,12 @@ WareHouse& WareHouse::operator=(const WareHouse& other) //Copy Assignment Operat
 {
     if(this != &other)
     {
-        clearWareHouse(); // deletes memory from the heap
+        deleteWareHouse(*this); // deletes memory from the heap
 
         isOpen = other.isOpen;
         customerCounter = other.customerCounter; 
         volunteerCounter = other.volunteerCounter; 
         updateWareHouse(other);
-
-        
     }
     return (*this);
 } 
@@ -77,15 +83,18 @@ WareHouse::WareHouse(WareHouse&& other) noexcept :  //Move Constructor
 isOpen{other.isOpen}, actionsLog{move(other.actionsLog)}, volunteers{move(other.volunteers)},
 allOrders{move(other.allOrders)}, pendingOrders{move(other.pendingOrders)}, 
 inProcessOrders{move(other.inProcessOrders)}, completedOrders{move(other.completedOrders)}, 
-customers(move(other.customers)), customerCounter{move(other.customerCounter)}, 
+customers(move(other.customers)),doesntExist{move(other.doesntExist)}, 
+customerCounter{move(other.customerCounter)}, 
 volunteerCounter{move(other.volunteerCounter)}
-{} 
+{
+    clearWareHouse(other);
+} 
 
 WareHouse& WareHouse::operator=(WareHouse&& other) noexcept //Move Assignment Operator
 {
     if (this != &other)
     {
-        clearWareHouse();
+        deleteWareHouse(*this);
         isOpen = other.isOpen;
         actionsLog = move(other.actionsLog);
         volunteers = move(other.volunteers);
@@ -95,6 +104,8 @@ WareHouse& WareHouse::operator=(WareHouse&& other) noexcept //Move Assignment Op
         customerCounter = move(other.customerCounter); 
         volunteerCounter = move(other.volunteerCounter); 
         allOrders = move(other.allOrders);
+
+        clearWareHouse(other);
     }
     return (*this);
 }
@@ -163,7 +174,11 @@ Customer & WareHouse::getCustomer(int customerId) const
 
 Volunteer & WareHouse::getVolunteer(int volunteerId) const
 {
-    return (*(volunteers.at(volunteerId)));
+    Volunteer * volunteer {volunteers.at(volunteerId)};
+    if(volunteer)
+        return (*volunteer);
+    else
+        return (*doesntExist);
 }
 
 Order & WareHouse::getOrder(int orderId) const
@@ -189,7 +204,7 @@ void WareHouse::close()
 void WareHouse::open()
 {
     isOpen = true;
-    cout << "Warehouse is open!" << endl;
+    cout << "Warehouse is open!" << endl << endl;
 }
 
 int WareHouse::getNumOrders() const
@@ -224,8 +239,12 @@ void WareHouse::updateWareHouse(const WareHouse &other){
         actionsLog.push_back((other.getAction(i)).clone());
     }
 
-    for(int i{}; i < other.getNumVolunteers(); ++i){
-        volunteers.push_back((other.getVolunteer(i)).clone());
+    for(int i{}; i < getNumVolunteers(); ++i){
+        Volunteer & volunteer {other.getVolunteer(i)};
+        if(volunteer.getId() != -1)
+            volunteers.push_back(volunteer.clone());
+        else
+            volunteers.push_back(nullptr);
     }
 
     for(int i{}; i < other.getNumOrders(); ++i){
@@ -250,4 +269,6 @@ void WareHouse::updateWareHouse(const WareHouse &other){
         Order * clone = (*order).clone();
         completedOrders.push_back(clone);
     }
+
+    doesntExist = (other.doesntExist)->clone();
 }

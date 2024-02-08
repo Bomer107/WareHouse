@@ -1,6 +1,5 @@
 #pragma once
 #include "main.h"
-
 #include "Order.h"
 #include "Customer.h"
 #include "Volunteer.h"
@@ -20,7 +19,8 @@ class WareHouse {
         WareHouse& operator=(const WareHouse& other); //Copy Assignment Operator
         WareHouse(WareHouse&& other) noexcept; //Move Constructor
         WareHouse& operator=(WareHouse&& other) noexcept; //Move Assignment Operator
-        void clearWareHouse();
+        void deleteWareHouse(WareHouse &wareHouse);
+        void clearWareHouse(WareHouse &wareHouse);
         void updateWareHouse(const WareHouse &other);
         void start();
         void addOrder(Order* order);
@@ -52,6 +52,7 @@ class WareHouse {
         vector<Order*> inProcessOrders;
         vector<Order*> completedOrders;
         vector<Customer*> customers;
+        Volunteer* doesntExist;
         int customerCounter; //For assigning unique customer IDs
         int volunteerCounter; //For assigning unique volunteer IDs
 };

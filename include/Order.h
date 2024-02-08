@@ -23,7 +23,7 @@ class Order {
         int getCustomerId() const;
         int getDistance() const;
         void setStatus(OrderStatus status);
-        void accepted(int id);
+        void update(int id);
         void setCollectorId(int collectorId);
         void setDriverId(int driverId);
         void setfinish(bool wateFor);

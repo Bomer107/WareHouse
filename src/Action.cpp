@@ -45,7 +45,7 @@ string BaseAction::getStatusString() const
    switch (getStatus()) 
    {
       case ActionStatus::COMPLETED: return "COMPLETED";
-      case ActionStatus::ERROR: return "COLLECTING";
+      case ActionStatus::ERROR: return "ERROR";
       default: return "Unknown";
    }
 }
@@ -71,19 +71,19 @@ void SimulateStep::act(WareHouse &wareHouse)
    vector<Order*> &pending = wareHouse.getPendingOrders();
    vector<Order*> &inProccess = wareHouse.getInproccessOrders();
    vector<Order*> &completed = wareHouse.getCompleted();
-   vector<Volunteer*>volunteers = wareHouse.getVolunteers();
+   vector<Volunteer*> &volunteers = wareHouse.getVolunteers();
    for(int i{}; i < numOfSteps; ++i) {
 
       //assigning volunteers to orders
       for(vector<Order*>::iterator it = pending.begin(); it != pending.end();){
          bool accepted{false};
          for(size_t j{}; j < volunteers.size() && !accepted; ++j){
-            Volunteer *volunteer = volunteers[j];
+            Volunteer *volunteer{volunteers[j]};
             Order& order = *(*it);
-            if(volunteer->canTakeOrder(order)){
+            if(volunteer && volunteer->canTakeOrder(order)){
                accepted = true;
                volunteer->acceptOrder(order);
-               order.accepted(volunteer->getId());
+               order.update(volunteer->getId());
                inProccess.push_back(&order);
                it = pending.erase(it);
             }
@@ -92,27 +92,43 @@ void SimulateStep::act(WareHouse &wareHouse)
             ++it;
       }
 
+      //doing step for every volunteer. if he finished is job, the order will
       for (Volunteer* volunteer : volunteers) {
-         volunteer->step();
-         if((volunteer->getActiveOrderId()) == NO_ORDER && (volunteer->getCompletedOrderId()) != NO_ORDER){
-            int id = volunteer->getCompletedOrderId();
-            Order &order = wareHouse.getOrder(id);
-            order.setfinish(true);
+         if(volunteer){
+            volunteer->step();
+            if(volunteer->getActiveOrderId() == NO_ORDER && (volunteer->getCompletedOrderId()) != NO_ORDER){
+               int id = volunteer->getCompletedOrderId();
+               Order &order = wareHouse.getOrder(id);
+               order.setfinish(true);
+            }
          }
       }
 
+      //directing the orders that were just finished into 
       for (vector<Order*>::iterator it = inProccess.begin(); it != inProccess.end();) {
          if ((*it)->getfinish()) {
+            (*it)->setfinish(false);
             if((*it)->getStatus()==OrderStatus::COLLECTING)
                pending.insert(pending.begin(), *it);
             
-            else if((*it)->getStatus()==OrderStatus::DELIVERING)
+            else if((*it)->getStatus()==OrderStatus::DELIVERING){
                completed.insert(completed.begin(),*it);
+               (*it)->update(0);
+            }
             
             it = inProccess.erase(it);
          }
          else 
             ++it;
+      }
+
+      //deleting limited volunteers that ended their orders
+      for(vector<Volunteer*>::iterator it = volunteers.begin(); it != volunteers.end(); ++it){
+         Volunteer* volunteer{*it};
+         if (volunteer && !(volunteer->hasOrdersLeft())){
+            delete volunteer;
+            volunteer = nullptr;
+         }
       }
    }
 }
@@ -129,7 +145,7 @@ SimulateStep * SimulateStep::clone() const
 std::string SimulateStep::toString() const
 {
    stringstream ss;
-   ss << "step " << numOfSteps << " " << getStatusString();
+   ss << "simulateStep " << numOfSteps << " " << getStatusString();
    return ss.str();
 }
 
@@ -249,7 +265,8 @@ void PrintOrderStatus::act(WareHouse &wareHouse)
    wareHouse.addAction(this);
    if(orderId < wareHouse.getNumOrders() && orderId > -1){
       Order * order = &(wareHouse.getOrder(orderId));
-      cout << order->toString();
+      cout << "--------------------------------------------" << endl;
+      cout << order->toString() << endl;
       complete();
    }
    else
@@ -288,12 +305,15 @@ void PrintCustomerStatus::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
    if(customerId < wareHouse.getNumCustomers() && customerId > -1){
+      cout << "--------------------------------------------" << endl;
       Customer &customer = wareHouse.getCustomer(customerId);
       cout << "CustomerID: " << customer.getId() << endl;
-      vector<int> customerOrders {customer.getOrdersIds()};
+      const vector<int> & customerOrders {customer.getOrdersIds()};
       for(int orderID : customerOrders){
+         cout << "--------------------------------------------" << endl;
          cout << "OrderID: " << orderID << endl;
          cout << "OrderStatus: " << (wareHouse.getOrder(orderID)).getStatusString() << endl;
+
       }
       cout << "numOrdersLeft: " << customer.getMaxOrders() - customerOrders.size() << endl;
       complete();
@@ -333,8 +353,10 @@ void PrintVolunteerStatus::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
    if(VolunteerId < wareHouse.getNumVolunteers() && VolunteerId > -1){
+      cout << "--------------------------------------------" << endl;
       Volunteer &volunteer = wareHouse.getVolunteer(VolunteerId);
-      cout << volunteer.toString();
+      if(volunteer.getId() != -1)
+         cout << volunteer.toString() << endl;
       complete();
    }
    
@@ -370,7 +392,8 @@ PrintActionsLog::PrintActionsLog(){}
 
 void PrintActionsLog::act(WareHouse &wareHouse)
 {
-   vector<BaseAction *> actions = wareHouse.getActions();
+   cout << "--------------------------------------------" << endl;
+   const vector<BaseAction *> & actions {wareHouse.getActions()};
    for(BaseAction * action: actions)
       cout << action->toString() << endl;
 
@@ -405,8 +428,11 @@ Close::Close(){}
 void Close::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
-   for(int i{}; i < wareHouse.getNumOrders(); ++i)
-      cout << (wareHouse.getOrder(i)).toString();
+   cout << "--------------------------------------------" << endl;
+   for(int i{}; i < wareHouse.getNumOrders(); ++i){
+      cout << (wareHouse.getOrder(i)).toString() << endl << endl;
+      cout << "--------------------------------------------" << endl;
+   }
    complete();
    wareHouse.close();
 }

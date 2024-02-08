@@ -31,7 +31,6 @@ class Volunteer {
     private:
         const int id;
         const string name;
-
 };
 
 

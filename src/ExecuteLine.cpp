@@ -5,6 +5,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
     string &the_command = command[0];
     if(the_command == "customer"){
         addCustomerGeneral(warehouse, command, 0, false);
+        cout << endl;
     }
 
     else if(the_command == "step"){
@@ -13,8 +14,13 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
             return -1;
         }
         int number_of_steps = csti(command[1], "number_of_steps");
+        if(number_of_steps < 1){
+            cout << endl;
+            return -1;
+        }
         SimulateStep * simulateStep = new SimulateStep(number_of_steps);
         simulateStep->act(warehouse);
+        cout << endl;
     }
 
     else if(the_command == "order"){
@@ -24,11 +30,12 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         }
         int customer_id = csti(command[1], "customer_id");
         if(customer_id < 0){
-            cerr << "customer_id has to be a non-negative number" << endl;
+            cout << endl;
             return -1;
         }
         AddOrder * addOrder = new AddOrder(customer_id);
         addOrder->act(warehouse);
+        cout << endl;
         
     }
 
@@ -39,11 +46,12 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         }
         int order_id = csti(command[1], "order_id");
         if(order_id < 0){
-            cerr << "order_id has to be a non-negative number" << endl;
+            cout << endl;
             return -1;
         }
         PrintOrderStatus * printOrderStatus {new PrintOrderStatus(order_id)};
         printOrderStatus->act(warehouse);
+        cout << endl;
     }
 
     else if(the_command == "customerStatus"){
@@ -53,11 +61,12 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         }
         int customer_id = csti(command[1], "customer_id");
         if(customer_id < 0){
-            cerr << "customer_id has to be a non-negative number" << endl;
+            cout << endl;
             return -1;
         }
         PrintCustomerStatus * printCustomerStatus = new PrintCustomerStatus(customer_id);
         printCustomerStatus->act(warehouse);
+        cout << endl;
     }
 
     else if(the_command == "volunteerStatus"){
@@ -67,11 +76,12 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         }
         int volunteer_id = csti(command[1], "volunteer_id");
         if(volunteer_id < 0){
-            cerr << "volunteer_id has to be a non-negative number" << endl;
+            cout << endl;
             return -1;
         }
         PrintVolunteerStatus * printVolunteerStatus = new PrintVolunteerStatus(volunteer_id);
         printVolunteerStatus->act(warehouse);
+        cout << endl;
     }
 
     else if(the_command == "log"){
@@ -81,6 +91,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         }
         PrintActionsLog * printActionsLog = new PrintActionsLog();
         printActionsLog->act(warehouse);
+        cout << endl;
     }
 
     else if(the_command == "close"){
@@ -99,6 +110,7 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         }
         BackupWareHouse * backupWareHouse = new BackupWareHouse();
         backupWareHouse->act(warehouse);
+        cout << endl;
     }
 
     else if(the_command == "restore"){
@@ -108,10 +120,12 @@ bool executeCommand(vector <string> &command, WareHouse &warehouse){
         }
         RestoreWareHouse * restoreWareHouse = new RestoreWareHouse();
         restoreWareHouse->act(warehouse);
+        cout << endl;
     }
 
     else{
         cerr << "This command isn't a valid command" << endl;
+        cout << endl;
         return false;
     }
     return true;
@@ -127,11 +141,14 @@ bool addCustomerGeneral(WareHouse &warehouse, vector<string> &command, int lineN
     int customer_distance = csti(command[3], "customer distance");
     int max_orders = csti(command[4], "max_orders");
     if(customer_distance < 1 || max_orders < 1){
+        cout << endl;
         return false;
     }
     if(customer_type != "soldier" && customer_type != "civilian"){
-        if(config)
+        if(config){
             printErrorAtLine(lineNum);
+            cout << endl;
+        }
         cerr << usage << endl;
         return false;
     }
@@ -147,7 +164,7 @@ bool addCustomerGeneral(WareHouse &warehouse, vector<string> &command, int lineN
             return true;
         }
     }
-    AddCustomer * addCustomer = new AddCustomer(customer_name, customer_type, customer_distance, max_orders);
+    AddCustomer * addCustomer {new AddCustomer(customer_name, customer_type, customer_distance, max_orders)};
     addCustomer->act(warehouse);
     return true;
 }
