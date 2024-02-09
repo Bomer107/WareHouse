@@ -1,0 +1,50 @@
+# Customers - customer <customer_name> <customer_type> <customer_distance> <max_orders>
+
+customer Moshe soldier 3 2              # Example of a soldier customer called Moshe, distance=3, maxOrders=2
+customer Ron civilian 2 1               # Example of a civilian customer called Ron, distance=2, maxOrders=1
+customer a soldier 3 100
+customer b soldier 100 6
+customer c soldier 28 5
+customer d soldier 4 4
+customer e soldier 1 2
+customer f soldier 2 3
+customer g civilian 3 5 
+customer h civilian 8 8 
+customer i civilian 5 6 
+customer j civilian 10 7 
+customer k civilian 3 2 
+
+# Volunteers - volunteer <volunteer_name> <volunteer_role> <volunteer_coolDown>/<volunteer_maxDistance> <distance_per_step>(for drivers only) <volunteer_maxOrders>(optional)
+
+volunteer Tamar collector 2             # Example of a collector, coolDown=2, maxOrders is unlimited
+volunteer Ron limited_collector 3 2     # Example of a limited collector, coolDown=3, maxOrders=2
+volunteer Tal driver 7 4                # Example of a driver, maxDistance=7, distance_per_step=4, maxOrders is unlimited
+volunteer Din limited_driver 3 2 3      # Example of a limited driver, maxDistance=3, distance_per_step=2, maxOrders=3
+
+volunteer A collector 2             # Example of a collector, coolDown=2, maxOrders is unlimited
+volunteer B collector 1
+volunteer C collector 3
+volunteer D collector 5
+volunteer E collector 1
+volunteer F collector 2
+
+volunteer G limited_collector 3 2     # Example of a limited collector, coolDown=3, maxOrders=2
+volunteer H limited_collector 3 2
+volunteer I limited_collector 3 2
+volunteer J limited_collector 3 2
+volunteer K limited_collector 3 2
+volunteer L limited_collector 3 2
+
+volunteer M driver 7 4                # Example of a driver, maxDistance=7, distance_per_step=4, maxOrders is unlimited
+volunteer N driver 7 4
+volunteer O driver 7 4
+volunteer P driver 7 4
+volunteer Q driver 7 4
+volunteer R driver 7 4
+
+volunteer S limited_driver 3 2 3      # Example of a limited driver, maxDistance=3, distance_per_step=2, maxOrders=3
+volunteer T limited_driver 3 2 3
+volunteer U limited_driver 3 2 3
+volunteer V limited_driver 3 2 3
+volunteer W limited_driver 3 2 3
+volunteer X limited_driver 3 2 3

@@ -141,6 +141,9 @@ bool addCustomerGeneral(WareHouse &warehouse, vector<string> &command, int lineN
     int customer_distance = csti(command[3], "customer distance");
     int max_orders = csti(command[4], "max_orders");
     if(customer_distance < 1 || max_orders < 1){
+        if(config){
+            printErrorAtLine(lineNum);
+        }
         cout << endl;
         return false;
     }

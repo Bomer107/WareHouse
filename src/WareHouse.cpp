@@ -56,11 +56,11 @@ void WareHouse::clearWareHouse(WareHouse &wareHouse)
 
 //Copy constructor
 WareHouse::WareHouse(const WareHouse& other) : 
-isOpen{}, actionsLog{}, volunteers{},
+isOpen{other.isOpen}, actionsLog{}, volunteers{},
 allOrders{}, pendingOrders{}, 
 inProcessOrders{}, completedOrders{}, 
-customers(), doesntExist{},
-customerCounter{}, volunteerCounter{}
+customers{}, doesntExist{},
+customerCounter{other.customerCounter}, volunteerCounter{other.volunteerCounter}
 {
     updateWareHouse(other);
 }

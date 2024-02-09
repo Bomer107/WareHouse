@@ -125,9 +125,9 @@ void SimulateStep::act(WareHouse &wareHouse)
       //deleting limited volunteers that ended their orders
       for(vector<Volunteer*>::iterator it = volunteers.begin(); it != volunteers.end(); ++it){
          Volunteer* volunteer{*it};
-         if (volunteer && !(volunteer->hasOrdersLeft())){
+         if (volunteer && !(volunteer->hasOrdersLeft()) && volunteer->getActiveOrderId() == NO_ORDER){
             delete volunteer;
-            volunteer = nullptr;
+            *it = nullptr;
          }
       }
    }
@@ -161,7 +161,7 @@ AddOrder::AddOrder(int id) : BaseAction::BaseAction(), customerId{id}
 void AddOrder::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
-   if(customerId <= wareHouse.getNumCustomers()){
+   if(customerId < wareHouse.getNumCustomers()){
       Customer& customer {wareHouse.getCustomer(customerId)};
       if (customer.canMakeOrder()) {
          int distance {customer.getCustomerDistance()};
@@ -173,12 +173,12 @@ void AddOrder::act(WareHouse &wareHouse)
          complete();
       }
       else{
-         error("Cannot place this order, the customer can't make any more orders");
+         error("Error: Cannot place this order, the customer can't make any more orders");
          cout << getErrorMsg() << endl;
       }
    }
    else{
-      error("Cannot place this order, the customer doesn't exist");
+      error("Error: Cannot place this order, the customer doesn't exist");
       cout << getErrorMsg() << endl;
    }
 }
@@ -355,9 +355,14 @@ void PrintVolunteerStatus::act(WareHouse &wareHouse)
    if(VolunteerId < wareHouse.getNumVolunteers() && VolunteerId > -1){
       cout << "--------------------------------------------" << endl;
       Volunteer &volunteer = wareHouse.getVolunteer(VolunteerId);
-      if(volunteer.getId() != -1)
+      if(volunteer.getId() != -1){
          cout << volunteer.toString() << endl;
-      complete();
+         complete();
+      }
+      else{
+         error("Volunteer doesn't exist");
+         cout << getErrorMsg() << endl;
+      }
    }
    
    else
@@ -498,7 +503,7 @@ RestoreWareHouse::RestoreWareHouse(){}
 void RestoreWareHouse::act(WareHouse &wareHouse)
 {
    wareHouse.addAction(this);
-   if(backup != nullptr){
+   if(backup){
       wareHouse = *backup;
       complete();
    }
