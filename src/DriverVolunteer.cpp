@@ -8,6 +8,9 @@ DriverVolunteer * DriverVolunteer::clone() const
 {
     DriverVolunteer * clone {new DriverVolunteer(getId(), getName(), getMaxDistance(), getDistancePerStep())};
     clone->distanceLeft = distanceLeft;
+    clone->completedOrderId = getCompletedOrderId();
+    clone->activeOrderId = getActiveOrderId();
+    clone->finishedNow = getFinishedNow();
     return clone;
 }
 
@@ -51,16 +54,18 @@ bool DriverVolunteer::canTakeOrder(const Order &order) const
 
 void DriverVolunteer::acceptOrder(const Order &order)
 {
-    completedOrderId = activeOrderId;
     activeOrderId = order.getId();
     distanceLeft = order.getDistance();
 }
 
 void DriverVolunteer::step()
 {
-    if(decreaseDistanceLeft()){
+    if(finishedNow)
+        finishedNow = false;
+    if(activeOrderId != NO_ORDER && decreaseDistanceLeft()){
         completedOrderId = activeOrderId;
         activeOrderId = NO_ORDER;
+        finishedNow = true;
     }
 }
 
@@ -74,7 +79,7 @@ string DriverVolunteer::toString() const
         ss << "OrderId: " << getActiveOrderId();
     }
     else
-        ss << "False";
+        ss << "False" << "\n" << "OrderId: None";
     ss<< "\n";
     ss << "Distance left: ";
     if(getDistanceLeft() > 0)
@@ -83,4 +88,8 @@ string DriverVolunteer::toString() const
         ss << "None" << "\n";
     ss << "OrdersLeft: No Limit";
     return ss.str();
+}
+
+void DriverVolunteer::setDistanceLeft(int newDistanceLeft){
+    distanceLeft = newDistanceLeft;
 }

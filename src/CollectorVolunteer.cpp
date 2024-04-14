@@ -1,4 +1,5 @@
 #include "../include/Volunteer.h"
+#include "Volunteer.h"
 
 CollectorVolunteer::CollectorVolunteer(int id, string name, int coolDown): 
 Volunteer(id, name), coolDown{coolDown}, timeLeft{NO_ORDER}
@@ -8,14 +9,20 @@ CollectorVolunteer * CollectorVolunteer::clone() const
 {
     CollectorVolunteer * clone {new CollectorVolunteer(getId(), getName(), getCoolDown())};
     clone->timeLeft = timeLeft;
+    clone->completedOrderId = getCompletedOrderId();
+    clone->activeOrderId = getActiveOrderId();
+    clone->finishedNow = getFinishedNow();
     return clone;
 }
 
 void CollectorVolunteer::step()
 {
-    if(decreaseCoolDown()){
+    if(finishedNow)
+        finishedNow = false;
+    if(activeOrderId != NO_ORDER && decreaseCoolDown()){
         completedOrderId = activeOrderId;
         activeOrderId = NO_ORDER;
+        finishedNow = true;
     }
 }
 
@@ -68,7 +75,7 @@ string CollectorVolunteer::toString() const
         ss << "OrderId: " << getActiveOrderId();
     }
     else
-        ss << "False";
+        ss << "False" << "\n" << "OrderId: None";
     ss<< "\n";
     ss << "TimeLeft: ";
     if(getTimeLeft() > 0)
@@ -79,3 +86,7 @@ string CollectorVolunteer::toString() const
     return ss.str();
 }
 
+void CollectorVolunteer::setTimeLeft(int newTimeLeft)
+{
+    timeLeft = newTimeLeft;
+}

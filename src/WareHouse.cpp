@@ -69,7 +69,7 @@ WareHouse& WareHouse::operator=(const WareHouse& other) //Copy Assignment Operat
 {
     if(this != &other)
     {
-        deleteWareHouse(*this); // deletes memory from the heap
+        deleteWareHouse(*this); // deletes memory from the heap and cleans wareHouse
 
         isOpen = other.isOpen;
         customerCounter = other.customerCounter; 
@@ -86,9 +86,7 @@ inProcessOrders{move(other.inProcessOrders)}, completedOrders{move(other.complet
 customers(move(other.customers)),doesntExist{move(other.doesntExist)}, 
 customerCounter{move(other.customerCounter)}, 
 volunteerCounter{move(other.volunteerCounter)}
-{
-    clearWareHouse(other);
-} 
+{} 
 
 WareHouse& WareHouse::operator=(WareHouse&& other) noexcept //Move Assignment Operator
 {
@@ -104,8 +102,6 @@ WareHouse& WareHouse::operator=(WareHouse&& other) noexcept //Move Assignment Op
         customerCounter = move(other.customerCounter); 
         volunteerCounter = move(other.volunteerCounter); 
         allOrders = move(other.allOrders);
-
-        clearWareHouse(other);
     }
     return (*this);
 }
@@ -239,7 +235,7 @@ void WareHouse::updateWareHouse(const WareHouse &other){
         actionsLog.push_back((other.getAction(i)).clone());
     }
 
-    for(int i{}; i < getNumVolunteers(); ++i){
+    for(int i{}; i < other.getNumVolunteers(); ++i){
         Volunteer & volunteer {other.getVolunteer(i)};
         if(volunteer.getId() != -1)
             volunteers.push_back(volunteer.clone());
@@ -247,27 +243,32 @@ void WareHouse::updateWareHouse(const WareHouse &other){
             volunteers.push_back(nullptr);
     }
 
-    for(int i{}; i < other.getNumOrders(); ++i){
-        Order * clone = (other.getOrder(i)).clone();
-        allOrders.push_back(clone);
-    }
+    allOrders.resize(other.getNumOrders());
 
     for(size_t i{}; i < (other.pendingOrders).size(); ++i){
-        Order *order = (other.pendingOrders)[i];
+        Order *order = (other.pendingOrders).at(i);
         Order * clone = (*order).clone();
         pendingOrders.push_back(clone);
+        allOrders.at(clone->getId()) = clone;
     }
 
     for(size_t i{}; i < (other.inProcessOrders).size(); ++i){
-        Order *order = (other.inProcessOrders)[i];
+        Order *order = (other.inProcessOrders).at(i);
         Order * clone = (*order).clone();
         inProcessOrders.push_back(clone);
+        allOrders.at(clone->getId()) = clone;
     }
     
     for(size_t i{}; i < (other.completedOrders).size(); ++i){
-        Order *order = (other.completedOrders)[i];
+        Order *order = (other.completedOrders).at(i);
         Order * clone = (*order).clone();
         completedOrders.push_back(clone);
+        allOrders.at(clone->getId()) = clone;
+    }
+
+    for(size_t i{}; i < (other.customers).size(); ++i){
+        Customer *customer {(other.customers).at(i)};
+        customers.push_back((*customer).clone());
     }
 
     doesntExist = (other.doesntExist)->clone();

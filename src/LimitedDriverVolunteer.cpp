@@ -9,6 +9,10 @@ LimitedDriverVolunteer * LimitedDriverVolunteer::clone() const
 {
     LimitedDriverVolunteer * clone {new LimitedDriverVolunteer(getId(), getName(), getMaxDistance(), getDistancePerStep(), getMaxOrders())};
     clone->ordersLeft = getNumOrdersLeft();
+    clone->setDistanceLeft(getDistanceLeft());
+    clone->completedOrderId = getCompletedOrderId();
+    clone->activeOrderId = getActiveOrderId();
+    clone->finishedNow = getFinishedNow();
     return clone;
 }
 
@@ -48,7 +52,7 @@ string LimitedDriverVolunteer::toString() const
         ss << "OrderId: " << getActiveOrderId();
     }
     else
-        ss << "False";
+        ss << "False" << "\n" << "OrderId: None";
     ss<< "\n";
     ss << "Distance left: ";
     if(getDistanceLeft() > 0)

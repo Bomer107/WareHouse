@@ -7,7 +7,11 @@ CollectorVolunteer(id, name, coolDown), maxOrders{maxOrders}, ordersLeft{maxOrde
 LimitedCollectorVolunteer * LimitedCollectorVolunteer::clone() const
 {
     LimitedCollectorVolunteer * clone {new LimitedCollectorVolunteer(getId(), getName(), getCoolDown(), getMaxOrders())};
+    clone->setTimeLeft(getTimeLeft());
     clone->ordersLeft = ordersLeft;
+    clone->completedOrderId = getCompletedOrderId();
+    clone->activeOrderId = getActiveOrderId();
+    clone->finishedNow = getFinishedNow();
     return clone;
 }
 
@@ -47,7 +51,7 @@ string LimitedCollectorVolunteer::toString() const
         ss << "OrderId: " << getActiveOrderId();
     }
     else
-        ss << "False";
+        ss << "False" << "\n" << "OrderId: None";
     ss<< "\n";
     ss << "TimeLeft: ";
     if(getTimeLeft() > 0)

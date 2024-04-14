@@ -6,7 +6,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/bin/WareHouse",
-        "args": ["./configFiles/configFile3.txt"],
+        "args": ["./configFiles/configFile4.txt"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
         "environment": [],

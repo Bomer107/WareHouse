@@ -96,29 +96,26 @@ void SimulateStep::act(WareHouse &wareHouse)
       for (Volunteer* volunteer : volunteers) {
          if(volunteer){
             volunteer->step();
-            if(volunteer->getActiveOrderId() == NO_ORDER && (volunteer->getCompletedOrderId()) != NO_ORDER){
+            if(volunteer->getFinishedNow()){
                int id = volunteer->getCompletedOrderId();
                Order &order = wareHouse.getOrder(id);
                order.setfinish(true);
+               if(order.getStatus() == OrderStatus::COLLECTING)
+                  pending.push_back(&order);
+               else if(order.getStatus() == OrderStatus::DELIVERING){
+                  completed.push_back(&order);
+                  order.update(0);
+               }
             }
          }
       }
 
-      //directing the orders that were just finished into 
-      for (vector<Order*>::iterator it = inProccess.begin(); it != inProccess.end();) {
-         if ((*it)->getfinish()) {
+      for(vector<Order*>::iterator it = inProccess.begin(); it != inProccess.end();){
+         if((*it)->getfinish()){
             (*it)->setfinish(false);
-            if((*it)->getStatus()==OrderStatus::COLLECTING)
-               pending.insert(pending.begin(), *it);
-            
-            else if((*it)->getStatus()==OrderStatus::DELIVERING){
-               completed.insert(completed.begin(),*it);
-               (*it)->update(0);
-            }
-            
             it = inProccess.erase(it);
          }
-         else 
+         else
             ++it;
       }
 
@@ -271,7 +268,7 @@ void PrintOrderStatus::act(WareHouse &wareHouse)
    }
    else
    {
-      error("Order doesn't exist");
+      error("Error: Order doesn't exist");
       cout << getErrorMsg() << endl;
    }
 }
@@ -320,7 +317,7 @@ void PrintCustomerStatus::act(WareHouse &wareHouse)
    }
    else
    {
-      error("Customer doesn't exist");
+      error("Error: Customer doesn't exist");
       cout << getErrorMsg() << endl;
    }
 }
@@ -360,14 +357,14 @@ void PrintVolunteerStatus::act(WareHouse &wareHouse)
          complete();
       }
       else{
-         error("Volunteer doesn't exist");
+         error("Error: Volunteer doesn't exist");
          cout << getErrorMsg() << endl;
       }
    }
    
    else
    {
-      error("Volunteer doesn't exist");
+      error("Error: Volunteer doesn't exist");
       cout << getErrorMsg() << endl;
    }
 }
@@ -502,13 +499,14 @@ RestoreWareHouse::RestoreWareHouse(){}
         
 void RestoreWareHouse::act(WareHouse &wareHouse)
 {
-   wareHouse.addAction(this);
    if(backup){
       wareHouse = *backup;
+      wareHouse.addAction(this);
       complete();
    }
    else{
-      error("No backup available");
+      wareHouse.addAction(this);
+      error("Error: No backup available");
       cout << getErrorMsg() << endl;
    }
 }
