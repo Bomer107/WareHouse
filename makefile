@@ -6,7 +6,7 @@ Src_files := $(wildcard src/*.cpp)
 
 Obj_files := $(patsubst src/%.cpp, bin/%.o, $(Src_files))
 
-Executable := bin/WareHouse
+Executable := bin/warehouse
 
 all: clean $(Executable)
 
